@@ -1,0 +1,35 @@
+---
+title: "**Programación**"
+subtitle: "CUNEF Universidad"
+date: "Página actualizada: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
+output:
+  html_document:
+    css: ./index.css
+    toc: yes
+    toc_float: yes
+    fig_caption: no
+    seal : False
+    includes:
+      after_body: insert-logo.html
+  pdf_document:
+    toc: yes
+---
+
+
+<div class="title-logo"></div>
+
+```{r packages_setup, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+
+Esta es la página del curso de Programación creado por
+[Roi Naveiro](http://roinaveiro.github.io)
+
+  
+## **Laboratorios**
+
+  - [Lab 01 - Introducción a R](./labs/lab01/lab01.html)
+  
+  
