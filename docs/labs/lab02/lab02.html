@@ -11,7 +11,7 @@
 
 
 
-<title>Programación</title>
+<title>Lab 02 - Vectores en R</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1465,6 +1465,26 @@ padding-right: 0;
 padding-left: 90px;
 font-size: 13pt;
 }
+ol>li:before {
+
+content: "Question " counter(li)".";
+
+counter-increment: li;
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+}
+ol ol>li:before {
+counter-reset: sub-item;
+
+
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+padding-left: 90px;
+}
 .td {
 font-size: 10pt;
 }
@@ -1626,9 +1646,7 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore"><strong>Programación</strong></h1>
-<h3 class="subtitle">CUNEF Universidad</h3>
-<h4 class="date">Página actualizada: 2023-02-07</h4>
+<h1 class="title toc-ignore">Lab 02 - Vectores en R</h1>
 
 </div>
 
@@ -1636,13 +1654,324 @@ border-radius: 0px;
 <div class="title-logo">
 
 </div>
-<p>Esta es la página del curso de Programación creado por <a href="http://roinaveiro.github.io">Roi Naveiro</a></p>
-<div id="laboratorios" class="section level2">
-<h2><strong>Laboratorios</strong></h2>
+<div id="vectores" class="section level1">
+<h1>Vectores</h1>
+<p>Los vectores son conjunto de datos del <strong>mismo tipo</strong> y
+<strong>unidimensional</strong>. Ya hemos aprendido a crear vectores con
+la función <code>c()</code></p>
+<pre class="r"><code>x &lt;- c(1, 2, 3)
+x</code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<p>También, podemos dar nombres</p>
+<pre class="r"><code>x &lt;- c(paciente1=1, paciente2=0, paciente3=1)
+x</code></pre>
+<pre><code>## paciente1 paciente2 paciente3 
+##         1         0         1</code></pre>
+<p>Otras formas de crear vectores</p>
+<pre class="r"><code># Secuencias 
+2:6</code></pre>
+<pre><code>## [1] 2 3 4 5 6</code></pre>
+<pre class="r"><code># Otra forma de crear secuencias
+seq(2, 6, by=2) </code></pre>
+<pre><code>## [1] 2 4 6</code></pre>
+<pre class="r"><code># Más secuencias:
+rep(c(1,3), times=2) </code></pre>
+<pre><code>## [1] 1 3 1 3</code></pre>
+<pre class="r"><code># Más secuencias
+rep(c(1,3), each=2)</code></pre>
+<pre><code>## [1] 1 1 3 3</code></pre>
+<p>También podemos crear <strong>vectores aleatorios</strong> con la
+función <code>sample</code>.</p>
+<div id="tu-turno" class="section level2">
+<h2>Tu turno</h2>
+<p>Crea un vector con la secuencia 0.1, 0.2, …, 99.9, 100</p>
+<pre class="r"><code>## Tu código aquí</code></pre>
+</div>
+</div>
+<div id="operaciones-con-vectores" class="section level1">
+<h1>Operaciones con vectores</h1>
+<p>R realiza operaciones <em>element-wise</em></p>
+<p><strong>Vector - Número</strong></p>
+<pre class="r"><code>b &lt;- 1:10
+b + 7</code></pre>
+<pre><code>##  [1]  8  9 10 11 12 13 14 15 16 17</code></pre>
+<p><strong>Vector - Vector (misma longitud)</strong></p>
+<pre class="r"><code>b * b</code></pre>
+<pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
+<p><strong>Vector - Vector (diferente longitud)</strong></p>
+<pre class="r"><code># R repite el vector corto hasta alcanzar la longitud del largo
+# Si la longitud del corto no es múltiplo de la del largo lanza un warning
+d &lt;- 1:2
+e &lt;- 1:4
+
+d * e</code></pre>
+<pre><code>## [1] 1 4 3 8</code></pre>
+</div>
+<div id="operaciones-lógicas-con-vectores" class="section level1">
+<h1>Operaciones lógicas con vectores</h1>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Operador</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>==</code></td>
+<td align="left">Igual a</td>
+</tr>
+<tr class="even">
+<td align="left"><code>!=</code></td>
+<td align="left">Distinto de</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>&gt;</code></td>
+<td align="left">Mayor</td>
+</tr>
+<tr class="even">
+<td align="left"><code>&gt;=</code></td>
+<td align="left">Mayor o igual</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>&lt;</code></td>
+<td align="left">Menor</td>
+</tr>
+<tr class="even">
+<td align="left"><code>&lt;=</code></td>
+<td align="left">Menor o igual</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>%in%</code></td>
+<td align="left">Está en conjunto</td>
+</tr>
+</tbody>
+</table>
+<div id="tu-turno-1" class="section level2">
+<h2>Tu turno</h2>
+<p>Determina que elementos del vector de números de 1 a 100 son pares.
+Para ello, has de obtener un vector de longitud 100, donde TRUE figure
+en las posiciones correspondientes números pares, y FALSE en el
+resto</p>
+<pre class="r"><code>## Tu código aquí</code></pre>
+</div>
+</div>
+<div id="funciones-matemáticas" class="section level1">
+<h1>Funciones Matemáticas</h1>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Función</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>log</code></td>
+<td align="left">Logaritmo Nat.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>exp</code></td>
+<td align="left">Exponencial</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>min</code></td>
+<td align="left">Elem. mínimo</td>
+</tr>
+<tr class="even">
+<td align="left"><code>max</code></td>
+<td align="left">Elem. máximo</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>sum</code></td>
+<td align="left">Suma</td>
+</tr>
+<tr class="even">
+<td align="left"><code>mean</code></td>
+<td align="left">Media</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>median</code></td>
+<td align="left">Mediana</td>
+</tr>
+<tr class="even">
+<td align="left"><code>var</code></td>
+<td align="left">Variaza</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>sd</code></td>
+<td align="left">Dev. Est.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>quantile</code></td>
+<td align="left">Cuantiles 0, 25, 50, 75, 100</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>cor</code></td>
+<td align="left">Correlación</td>
+</tr>
+</tbody>
+</table>
+<p>Además de estas operaciones, las vistas en el lab anterior (suma,
+resta, multiplicación, resto) se aplican a vectores.</p>
+<div id="tu-turno-2" class="section level2">
+<h2>Tu turno</h2>
 <ul>
-<li><a href="./labs/lab01/lab01.html">Lab 01 - Introducción a R</a></li>
-<li><a href="./labs/lab02/lab02.html">Lab 02 - Vectores en R</a></li>
+<li>Calcula la media y la mediana de los números entre 1 y 100</li>
 </ul>
+<pre class="r"><code>## Tu código aquí</code></pre>
+</div>
+</div>
+<div id="otras-funciones-sobre-vectores" class="section level1">
+<h1>Otras Funciones sobre Vectores</h1>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Función</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>length(x)</code></td>
+<td align="left">Número elementos</td>
+</tr>
+<tr class="even">
+<td align="left"><code>names(x)</code></td>
+<td align="left">Nombres (si hay)</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>sort(x)</code></td>
+<td align="left">Ordena menor a mayor</td>
+</tr>
+<tr class="even">
+<td align="left"><code>rev(x)</code></td>
+<td align="left">Revierte</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>table(x)</code></td>
+<td align="left">Tabla frecuencias</td>
+</tr>
+<tr class="even">
+<td align="left"><code>unique(x)</code></td>
+<td align="left">Valores únicos</td>
+</tr>
+</tbody>
+</table>
+<div id="tu-turno-3" class="section level2">
+<h2>Tu turno</h2>
+<p>El siguiente vector contiene información sobre el tipo de transmisión
+de 32 vehículos (0 = automático, 1 = manual). ¿Cuántos vehículos hay de
+cada tipo?</p>
+<pre class="r"><code>transmision = mtcars$am</code></pre>
+</div>
+</div>
+<div id="indexación-de-vectores" class="section level1">
+<h1>Indexación de vectores</h1>
+<p>Indexar es seleccionar elementos de un vector</p>
+<div id="indexación-por-posición" class="section level2">
+<h2>Indexación por posición</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Sintáxis</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>x[3]</code></td>
+<td align="left">Tercer elemento</td>
+</tr>
+<tr class="even">
+<td align="left"><code>x[-3]</code></td>
+<td align="left">Todos menos terceros</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>x[2:4]</code></td>
+<td align="left">Elementos 2,3,4</td>
+</tr>
+<tr class="even">
+<td align="left"><code>x[-(2:4)]</code></td>
+<td align="left">Todos menos 2,3,4</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>x[c(1,5)]</code></td>
+<td align="left">Elementos 1 y 5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="indexación-por-valor" class="section level2">
+<h2>Indexación por valor</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Sintáxis</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>x[x==10]</code></td>
+<td align="left">Elementos de valor 10</td>
+</tr>
+<tr class="even">
+<td align="left"><code>x[x&lt;0]</code></td>
+<td align="left">Elementos menores a 0</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>x[x %in% c(1,2,5)]</code></td>
+<td align="left">Elementos que sean o bien 1 o 2 o 5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="indexación-por-nombre" class="section level2">
+<h2>Indexación por nombre</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Sintáxis</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>x[&quot;paciente1&quot;]</code></td>
+<td align="left">Elementos con nombre paciente1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="ejercicios" class="section level1">
+<h1>Ejercicios</h1>
+<ol style="list-style-type: decimal">
+<li><p>Crea un vector de 100 números al azar, escogidos entre los
+números 0, 0.1, 0.2, …, 9.8, 9.9, 10</p></li>
+<li><p>Simula 1000 tiradas del juego de la ruleta con un único 0
+(números del 1 al 36 más el 0, todos equiprobables). Almacena el
+resultado</p></li>
+<li><p>¿En cuántas tiradas salió el 0 en el ejercicio anterior?</p></li>
+<li><p>¿Existe algún número que no haya salido?</p></li>
+<li><p>Ordena los resultados de menor a mayor.</p></li>
+<li><p>¿Cuántas veces ha salido cada número?</p></li>
+<li><p>¿Qué salio en la primera, la quinta y la última tirada?</p></li>
+<li><p>¿Cuál es la media de las tiradas? ¿Y la mediana?</p></li>
+<li><p>¿En cuántas tiradas el resultado fue mayor que 15?</p></li>
+<li><p>En el juego de la ruleta:</p>
+<ul>
+<li>Los números (1,3,7,9,19,21,23,25,27,12,14,16,18,30,32,34,36) tienen
+color rojo.</li>
+<li>Los números (2,4,6,8,20,22,24,26,28,11,13,15,17,29,31,33,35) tienen
+color negro.</li>
+<li>El cero no tiene color.</li>
+</ul></li>
+</ol>
+<p>Calcula el número de rojos que hay en la secuencia generada en el
+ejercicio 2. Si hubieses apostado 1 euro al rojo en cada tirada, ¿cuál
+sería tu ganancia neta? ¿y si hubieses apostado al negro?</p>
 </div>
 
 

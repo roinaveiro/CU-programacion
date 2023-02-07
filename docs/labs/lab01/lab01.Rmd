@@ -264,4 +264,5 @@ ceiling(x)
 
 6. Utiliza la ayuda para determinar la utilidad de la función `ls()`. ¿Qué obtienes al ejecutarla?
 
+7. Obtén el valor del número e.
 

@@ -31,5 +31,6 @@ Esta es la página del curso de Programación creado por
 ## **Laboratorios**
 
   - [Lab 01 - Introducción a R](./labs/lab01/lab01.html)
+  - [Lab 02 - Vectores en R](./labs/lab02/lab02.html)
   
   

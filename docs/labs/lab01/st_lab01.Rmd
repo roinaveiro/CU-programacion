@@ -1,25 +1,14 @@
 ---
 title: "Lab 01 - Introducción a R"
-output:
-  html_document:
-    css: ./stat_labs.css
-    toc: yes
-    toc_float: yes
-    fig_caption: no
-    seal : False
-    includes:
-      after_body: insert-logo.html
-  pdf_document:
-    toc: yes
+author: "Tu nombre aquí"
+date: "2023-02-01"
+output: html_document
 ---
 
-
-<div class="title-logo"></div>
-
-```{r packages_setup, echo=FALSE, message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = T, warning = F, message = F)
-knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
+
 
 # El lenguaje de programación R
 
@@ -27,15 +16,6 @@ R es un **software libre** de programación especializacido en estadística. RSt
 
 - R: lenguaje de comunicación
 - RStudio: forma de comunicarse con máquina
-
-```{r, echo=FALSE, out.width = '80%',  fig.align='center'}
-knitr::include_graphics("img/r-rstudio.png")
-```
-
-
-```{r, echo=FALSE, out.width = '70%',  fig.align='center'}
-knitr::include_graphics("img/RGUI.png")
-```
 
 En el siguiente enlace puede encontrarse información acerca de la instalación de R y RStudio en diferentes sistemas operativos.
 
@@ -49,12 +29,6 @@ con el siguiente código damos a R la orden de multiplicar 123 por 65.
 
 ```{r, echo=TRUE}
 123 * 65
-```
-
-La respuesta en consola aparece como
-
-```{r, echo=FALSE, out.width = '20%',  fig.align='center'}
-knitr::include_graphics("img/console.png")
 ```
 
 Suele ser buena práctica explicar el código que se crea. Esto se hace a través de comentarios. Los comentarios se inician con el caracter #. De esta manera, R reconoce que lo que sucede a este caracter es un comentario y no lo ejecuta. Por ejemplo:
@@ -258,9 +232,11 @@ ceiling(x)
   
   ¿Qué obtienes?
   
-4. Crea una variable llamada Numero que contenga el número 3 y otra llamada numero que también contena el valor 6. Suma 7 a la variable Numero, ¿qué obtienes?
+4. Crea un script de R llamado `mi_script.R` donde guardes todos los pasos anteriores. Ejecuta el script.
 
-5. Utiliza la ayuda para determinar la utilidad de la función `ls()`
-. ¿Qué obtienes al ejecutarla?
+5. Crea una variable llamada Numero que contenga el número 3 y otra llamada numero que también contena el valor 6. Suma 7 a la variable Numero, ¿qué obtienes?
 
+6. Utiliza la ayuda para determinar la utilidad de la función `ls()`. ¿Qué obtienes al ejecutarla?
+
+7. Obtén el valor del número e.
 
