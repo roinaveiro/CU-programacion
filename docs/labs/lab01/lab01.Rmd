@@ -1,6 +1,8 @@
 ---
 title: "Lab 01 - Introducción a R"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     css: ./stat_labs.css
     toc: yes
@@ -9,8 +11,6 @@ output:
     seal : False
     includes:
       after_body: insert-logo.html
-  pdf_document:
-    toc: yes
 ---
 
 

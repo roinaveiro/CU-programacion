@@ -11,7 +11,7 @@
 
 
 
-<title>Programación</title>
+<title>Lab 03 - Factores en R</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1465,6 +1465,26 @@ padding-right: 0;
 padding-left: 90px;
 font-size: 13pt;
 }
+ol>li:before {
+
+content: "Question " counter(li)".";
+
+counter-increment: li;
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+}
+ol ol>li:before {
+counter-reset: sub-item;
+
+
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+padding-left: 90px;
+}
 .td {
 font-size: 10pt;
 }
@@ -1626,9 +1646,7 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore"><strong>Programación</strong></h1>
-<h3 class="subtitle">CUNEF Universidad</h3>
-<h4 class="date">Página actualizada: 2023-02-12</h4>
+<h1 class="title toc-ignore">Lab 03 - Factores en R</h1>
 
 </div>
 
@@ -1636,14 +1654,201 @@ border-radius: 0px;
 <div class="title-logo">
 
 </div>
-<p>Esta es la página del curso de Programación creado por <a href="http://roinaveiro.github.io">Roi Naveiro</a></p>
-<div id="laboratorios" class="section level2">
-<h2><strong>Laboratorios</strong></h2>
+<div id="factores" class="section level1">
+<h1>Factores</h1>
+<p>Los <strong>factores (factors)</strong> son un tipo de estructura de
+datos para almacenar variables categóricas: aquellas que puede tomar un
+número limitado de posibles valores (categorías). Ejemplos de variables
+categóricas: género de una persona, nacionalidad, …</p>
 <ul>
-<li><a href="./labs/lab01/lab01.html">Lab 01 - Introducción a R</a></li>
-<li><a href="./labs/lab02/lab02.html">Lab 02 - Vectores en R</a></li>
-<li><a href="./labs/lab03/lab03.html">Lab 03 - Factores en R</a></li>
+<li><p><strong>Variable categórica nominal</strong>: aquella que no
+tiene un orden preestablecido.</p></li>
+<li><p><strong>Variable categórica ordinal</strong>: aquella que tiene
+un orden establecido.</p></li>
 </ul>
+<p>A los distintos valores que puede tomar la variable se les denomina
+niveles, <strong>levels</strong>.</p>
+</div>
+<div id="creación-de-factores" class="section level1">
+<h1>Creación de factores</h1>
+<p>Imagina el siguiente vector de caracteres</p>
+<pre class="r"><code>x1 &lt;- c(&quot;Dec&quot;, &quot;Apr&quot;, &quot;Jan&quot;, &quot;Mar&quot;)
+class(x1)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Usar un vector de caracteres para almacenar este tipo de variable
+tiene dos problemas:</p>
+<ul>
+<li>Los valores son fijos y nada previene de errores. Por ejemplo:</li>
+</ul>
+<pre class="r"><code>x1 &lt;- c(&quot;Dec&quot;, &quot;Apr&quot;, &quot;Jan&quot;, &quot;Mer&quot;)
+x1</code></pre>
+<pre><code>## [1] &quot;Dec&quot; &quot;Apr&quot; &quot;Jan&quot; &quot;Mer&quot;</code></pre>
+<ul>
+<li>No ordena de forma útil</li>
+</ul>
+<p>¿Cómo está ordenando? ¿Cómo nos gustaría que ordenase?</p>
+<pre class="r"><code>sort(x1)</code></pre>
+<pre><code>## [1] &quot;Apr&quot; &quot;Dec&quot; &quot;Jan&quot; &quot;Mer&quot;</code></pre>
+<p>Esto se arregla creando un <strong>factor</strong>. En la creación de
+una variable de tipo factor, hay que especificar los
+<strong>niveles</strong> a través del argumento <code>levels</code>.</p>
+<pre class="r"><code>month_levels &lt;- c(
+  &quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, 
+  &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;
+)
+y1 &lt;- factor(x1, levels = month_levels)
+y1</code></pre>
+<pre><code>## [1] Dec  Apr  Jan  &lt;NA&gt;
+## Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</code></pre>
+<p>¿Qué sucede si hay errores en la escritura?</p>
+<div id="tu-turno" class="section level2">
+<h2>Tu turno</h2>
+<p>¿Qué sucede si ordenamos la nueva variable? ¿Dónde hemos espcificado
+el nuevo orden?</p>
+<pre class="r"><code>## Tu código aquí</code></pre>
+<p>Además, en la creación del factor, podemos añadir
+<code>ordered=TRUE</code> si la variable categórica es ordinal (no es
+super útil)</p>
+<pre class="r"><code>y1 &lt;- factor(x1, levels = month_levels, ordered=T)
+y1</code></pre>
+<pre><code>## [1] Dec  Apr  Jan  &lt;NA&gt;
+## 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</code></pre>
+<pre class="r"><code>class(y1)</code></pre>
+<pre><code>## [1] &quot;ordered&quot; &quot;factor&quot;</code></pre>
+</div>
+</div>
+<div id="trabajando-con-factores" class="section level1">
+<h1>Trabajando con factores</h1>
+<p>Podemos comprobar los niveles de una variable tipo factor de esta
+manera:</p>
+<pre class="r"><code>levels(y1)</code></pre>
+<pre><code>##  [1] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;</code></pre>
+<p>También podemos cambiarlos.</p>
+<pre class="r"><code>x &lt;- c(&quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot; )  
+x_factor &lt;- factor(x) 
+x_factor</code></pre>
+<pre><code>## [1] M M F M M F
+## Levels: F M</code></pre>
+<pre class="r"><code>levels(x_factor) &lt;- c(&quot;Female&quot;, &quot;Male&quot;) 
+x_factor</code></pre>
+<pre><code>## [1] Male   Male   Female Male   Male   Female
+## Levels: Female Male</code></pre>
+<ul>
+<li><p>¿Cómo ha identificado los niveles cuando hemos creado el factor
+sin especificarlos?</p></li>
+<li><p>¿Cómo ha identificado los niveles “Female” y “Male” con los
+anteriores?</p></li>
+</ul>
+<p>Podemos añadir un nuevo nivel:</p>
+<pre class="r"><code>v &lt;- c(&quot;Alta&quot;, &quot;Baja&quot;, &quot;Alta&quot;, &quot;Baja&quot;, &quot;Media&quot;) 
+f &lt;- factor(v, levels=c(&quot;Baja&quot;,&quot;Media&quot;, &quot;Alta&quot;)) 
+f</code></pre>
+<pre><code>## [1] Alta  Baja  Alta  Baja  Media
+## Levels: Baja Media Alta</code></pre>
+<pre class="r"><code>levels(f) &lt;- c(levels(f), &quot;Muy Alta&quot;) 
+f</code></pre>
+<pre><code>## [1] Alta  Baja  Alta  Baja  Media
+## Levels: Baja Media Alta Muy Alta</code></pre>
+<p>Y también cambiar el nombre de un nivel específico:</p>
+<pre class="r"><code>levels(f)[1] &lt;- &quot;Baja2&quot;
+f</code></pre>
+<pre><code>## [1] Alta  Baja2 Alta  Baja2 Media
+## Levels: Baja2 Media Alta Muy Alta</code></pre>
+</div>
+<div id="algunas-operaciones-lógicas" class="section level1">
+<h1>Algunas operaciones lógicas</h1>
+<pre class="r"><code>x1 = c(&quot;Feb&quot;, &quot;Mar&quot;, &quot;Jan&quot;, &quot;Dec&quot;, &quot;Oct&quot;)
+month_levels &lt;- c(
+  &quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, 
+  &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;
+)
+
+y1 &lt;- factor(x1, levels = month_levels, ordered=F)
+y1</code></pre>
+<pre><code>## [1] Feb Mar Jan Dec Oct
+## Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</code></pre>
+<p>Si hacemos <code>ordered=F</code>, entonces</p>
+<pre class="r"><code>y1[1] &gt; y1[2]</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>y1[1] == y1[2]</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>y1[1] != y1[2]</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>En cambio si hacemos <code>ordered=T</code>, entonces</p>
+<pre class="r"><code>y1 &lt;- factor(x1, levels = month_levels, ordered=T)
+
+y1[1] &gt; y1[2]</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>y1[1] == y1[2]</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>y1[1] != y1[2]</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Una función importante en R es <code>summary</code>. Lo que hace,
+depende del tipo de variable.</p>
+<pre class="r"><code>summary(x1)</code></pre>
+<pre><code>##    Length     Class      Mode 
+##         5 character character</code></pre>
+<pre class="r"><code>summary(y1)</code></pre>
+<pre><code>## Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
+##   1   1   1   0   0   0   0   0   0   1   0   1</code></pre>
+</div>
+<div id="otras-funciones-sobre-factores" class="section level1">
+<h1>Otras Funciones sobre factores</h1>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Función</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>length(f)</code></td>
+<td align="left">Número elementos</td>
+</tr>
+<tr class="even">
+<td align="left"><code>is.factores(f)</code></td>
+<td align="left">T o F según sea factor o no</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>as.factor(x)</code></td>
+<td align="left">Transforma x en factor</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="ejercicios" class="section level1">
+<h1>Ejercicios</h1>
+<ol style="list-style-type: decimal">
+<li>El siguiente vector contiene información sobre la transmisión de una
+serie de vehículos. Crea una variable de tipo factor con niveles
+“automatic” y “manual”. Para ello, primero tendrás que convertir la
+variable a tipo factor y después especificar los niveles.</li>
+</ol>
+<pre class="r"><code>transmision &lt;- mtcars$am</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>El siguiente vector almacena el consumo en millas por galón de los
+vehículos de la base de datos <code>mtcars</code>. ¿Cuál es el consumo
+medio de los vehículos automáticos? ¿Y el de los manuales?</li>
+</ol>
+<pre class="r"><code>consumo &lt;- mtcars$mpg</code></pre>
+<p>Extrae conclusiones.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>El siguiente vector almacena el peso en miles de libras de los
+vehículos de la base de datos <code>mtcars</code>. ¿Cuál es el peso
+medio de los vehículos automáticos? ¿Y el de los manuales?</li>
+</ol>
+<pre class="r"><code>peso &lt;- mtcars$wt</code></pre>
+<p>Extrae conclusiones.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Utilizando la función cut (ver ayuda) crea un factor a partir de
+la variable peso donde los vehículos cuyo valor en peso sea menor o
+igual a 2.8 se llamen ligeros, los que estén en el intervalo (2.8, 3.5]
+se llamen medios y los que pesen más de 3.5 se llamen pesados.</p></li>
+<li><p>Crea un factor ordenado para el siguiente vector y comprueba si
+la segunda observación es mayor que la quinta</p></li>
+</ol>
+<pre class="r"><code>speed_vector &lt;- c(&quot;Fast&quot;, &quot;Slow&quot;, &quot;Slow&quot;, &quot;Fast&quot;, &quot;Ultra-fast&quot;)</code></pre>
 </div>
 
 

@@ -1,0 +1,215 @@
+---
+title: "Lab 03 - Factores en R"
+output:
+  html_document:
+    css: ./stat_labs.css
+    toc: yes
+    toc_float: yes
+    fig_caption: no
+    seal : False
+    includes:
+      after_body: insert-logo.html
+  pdf_document:
+    toc: yes
+---
+
+
+<div class="title-logo"></div>
+
+```{r packages_setup, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+# Factores
+
+Los **factores (factors)** son un tipo de estructura de datos para almacenar variables categóricas:  aquellas que puede tomar un número limitado de posibles valores (categorías). Ejemplos de variables categóricas: género de una persona, nacionalidad, ...
+
+* **Variable categórica nominal**: aquella que no tiene un orden  preestablecido. 
+
+* **Variable categórica ordinal**: aquella que tiene un orden 	  	establecido. 
+
+A los distintos valores que puede tomar la variable se les denomina niveles, **levels**. 
+
+# Creación de factores
+
+Imagina el siguiente vector de caracteres
+
+```{r}
+x1 <- c("Dec", "Apr", "Jan", "Mar")
+class(x1)
+```
+
+Usar un vector de caracteres para almacenar este tipo de variable tiene dos problemas:
+
+* Los valores son fijos y nada previene de errores. Por ejemplo:
+
+```{r}
+x1 <- c("Dec", "Apr", "Jan", "Mer")
+x1
+```
+
+* No ordena de forma útil
+
+¿Cómo está ordenando? ¿Cómo nos gustaría que ordenase?
+```{r}
+sort(x1)
+```
+
+Esto se arregla creando un **factor**. En la creación de una variable de tipo factor, hay que especificar los **niveles** a través del argumento `levels`. 
+
+```{r}
+month_levels <- c(
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
+y1 <- factor(x1, levels = month_levels)
+y1
+```
+
+¿Qué sucede si hay errores en la escritura?
+
+
+## Tu turno
+
+¿Qué sucede si ordenamos la nueva variable? ¿Dónde hemos espcificado el nuevo orden?
+
+```{r}
+## Tu código aquí
+```
+
+
+Además, en la creación del factor, podemos añadir `ordered=TRUE` si la variable categórica  es ordinal (no es super útil)
+
+```{r}
+y1 <- factor(x1, levels = month_levels, ordered=T)
+y1
+class(y1)
+```
+
+
+# Trabajando con factores
+
+Podemos comprobar los niveles de una variable tipo factor de esta manera:
+
+```{r}
+levels(y1)
+```
+
+También podemos cambiarlos. 
+
+```{r}
+x <- c("M", "M", "F", "M", "M", "F" )  
+x_factor <- factor(x) 
+x_factor
+levels(x_factor) <- c("Female", "Male") 
+x_factor
+```
+
+* ¿Cómo ha identificado los niveles cuando hemos creado el factor sin especificarlos?
+
+* ¿Cómo ha identificado los niveles "Female" y "Male" con los anteriores?
+
+Podemos añadir un nuevo nivel:
+
+```{r}
+v <- c("Alta", "Baja", "Alta", "Baja", "Media") 
+f <- factor(v, levels=c("Baja","Media", "Alta")) 
+f
+levels(f) <- c(levels(f), "Muy Alta") 
+f
+```
+
+Y también cambiar el nombre de un nivel específico:
+
+```{r}
+levels(f)[1] <- "Baja2"
+f
+```
+
+# Algunas operaciones lógicas
+
+```{r}
+x1 = c("Feb", "Mar", "Jan", "Dec", "Oct")
+month_levels <- c(
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
+
+y1 <- factor(x1, levels = month_levels, ordered=F)
+y1
+```
+
+Si hacemos `ordered=F`, entonces
+
+```{r}
+y1[1] > y1[2]
+y1[1] == y1[2]
+y1[1] != y1[2]
+```
+
+En cambio si hacemos `ordered=T`, entonces
+
+```{r}
+y1 <- factor(x1, levels = month_levels, ordered=T)
+
+y1[1] > y1[2]
+y1[1] == y1[2]
+y1[1] != y1[2]
+```
+
+Una función importante en R es `summary`. Lo que hace, depende del tipo de variable.
+
+```{r}
+summary(x1)
+
+summary(y1)
+```
+
+# Otras Funciones sobre factores
+
+| Función          | Significado                   | 
+|:-----------------|:------------------------------| 
+| `length(f)`      | Número elementos              | 
+| `is.factores(f)` | T o F según sea factor o no   | 
+| `as.factor(x)`   | Transforma x en factor        | 
+
+
+# Ejercicios
+
+1. El siguiente vector contiene información sobre la transmisión de una serie de vehículos. Crea una variable de tipo factor con  niveles "automatic" y "manual". Para ello, primero tendrás que convertir la variable a tipo factor y después especificar los niveles.
+
+```{r}
+transmision <- mtcars$am
+```
+
+2. El siguiente vector almacena el consumo en millas por galón de los vehículos de la base de datos `mtcars`. ¿Cuál es el consumo medio de los vehículos automáticos? ¿Y el de los manuales?
+
+```{r}
+consumo <- mtcars$mpg
+```
+
+Extrae conclusiones.
+
+3. El siguiente vector almacena el peso en miles de libras de los vehículos de la base de datos `mtcars`. ¿Cuál es el peso medio de los vehículos automáticos? ¿Y el de los manuales?
+
+```{r}
+peso <- mtcars$wt
+```
+
+Extrae conclusiones.
+
+4. Utilizando la función cut (ver ayuda) crea un factor a partir de la variable peso donde los vehículos cuyo valor en peso sea menor o igual a 2.8 se llamen ligeros, los que estén  en el intervalo (2.8, 3.5] se llamen medios y los que pesen más de 3.5 se llamen pesados.
+
+5. Crea un factor ordenado para el siguiente vector y comprueba si la segunda observación es mayor que la quinta
+
+```{r}
+speed_vector <- c("Fast", "Slow", "Slow", "Fast", "Ultra-fast")
+```
+
+
+
+
+
+
+
