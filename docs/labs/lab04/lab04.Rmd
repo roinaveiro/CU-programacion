@@ -1,0 +1,281 @@
+---
+title: "Lab 04 - Matrices y Arrays en R"
+output:
+  html_document:
+    css: ./stat_labs.css
+    toc: yes
+    toc_float: yes
+    fig_caption: no
+    seal : False
+    includes:
+      after_body: insert-logo.html
+  pdf_document:
+    toc: yes
+---
+
+
+<div class="title-logo"></div>
+
+```{r packages_setup, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+# Matrices
+
+Las matrices son estructuras de datos de dos dimensiones, que albergan elementos del mismo tipo. Se organizan en filas y columnas.
+
+Para crear una matriz, indicamos:
+
+* Los datos a introducir.
+
+* `nrow`, número de filas
+
+* `ncol`, número de columnas
+
+* `byrow`, booleano que indica llenamos la matriz por filas o por columnas (por defecto FALSE)
+
+Basta con especificar `nrow` o `ncol` 
+
+```{r}
+m <- matrix(1:9, nrow=3)
+m
+m <- matrix(1:9, nrow=3, byrow=T)
+m
+```
+
+Así creamos una matriz columna
+
+```{r}
+m_col <- matrix(c(1,2,3))
+m_col
+```
+
+Y así creamos una matriz diagonal
+
+```{r}
+# Para la matriz identidad
+m_diag <- diag(3)
+m_diag
+
+# Para una diagonal que especificamos
+m_diag2 <- diag(c(1,2,3,4))
+m_diag2
+```
+
+## Tu turno
+
+Crea una **matriz fila** que contenga los números del uno al diez.
+
+# Operaciones con matrices
+
+Calcular la transpuesta
+
+```{r}
+m <- matrix(1:9, nrow=3)
+m
+m_t <- t(m)
+m_t
+```
+
+Autovectores, autovalores y determinante
+
+```{r}
+e <- eigen(m)
+e
+```
+
+Para extraer los autovalores hacemos
+
+```{r}
+e$values
+```
+
+Para extraer los autovectores
+
+```{r}
+e$vectors
+```
+
+Cálculo del determinante
+
+```{r}
+det(m)
+```
+
+Las operaciones aritméticas habituales, también se hacen **elemento a elemento**
+
+```{r}
+# Suma
+m+2
+
+# Producto
+m*3
+```
+
+Si sumamos o multiplicamos matrices, las operaciones se harán elemento a elemento
+
+```{r}
+# Suma de dos matrices
+m + m
+
+# Multiplicación elemento a elemento de dos matrices
+m*m
+```
+
+¿Qué sucede si las matrices tienen tamaños diferentes?
+
+La multiplicación de matrices se realiza de la siguiente forma
+
+```{r}
+m1 = matrix(1:9, nrow=3)
+m2 = matrix (1:12, nrow=3)
+m1 %*% m2
+dim(m1 %*% m2) # Con esto vemos la dimensión de la matriz resultante
+```
+
+Inversa de una matriz
+
+```{r}
+m <- matrix(sample(1:10, 9, replace=T), nrow=3)
+solve(m)
+```
+
+Resolver un sistema, tipo 
+$$
+5x + 7  = 20 \\
+3x + 2y = 30
+$$
+
+```{r}
+m_sistema <- matrix(c(5,7,3,2), nrow=2, byrow=T)
+d <- c(20,30)
+solve(m_sistema, d)
+```
+
+## Tu turno
+
+Crea una matriz 4x4 cualquiera y calcula su inversar. Usando código de R, determina que la inversa está correctamente calculada.
+
+```{r}
+## Tu código
+```
+
+# Algunas operaciones sobre matrices
+
+| Función           | Significado                  | 
+|:------------------|:-----------------------------| 
+| `rowSums(m)`      | Suma de filas                | 
+| `colSums(m)`      | Suma de columnas             | 
+| `rowMeans(m)`     | Media de filas               | 
+| `colMeans(m)`     | Media de columnas            | 
+| `diag(m)`         | Elementos de diagonal        | 
+
+# Manipulación de matrices
+
+Para añadir filas a una matriz se utiliza la función `rbind`, la cual une matrices y/o vectores por fila. Para añadir columnas a una matriz se utiliza la función `cbind`, la cual une matrices y/o vectores por columna
+
+```{r}
+a <- matrix(1:9, nrow=3)
+b <- matrix(10:18, nrow=3)
+# Por filas
+rbind(a,b)
+
+#Por columnas
+cbind(a,b)
+```
+
+## Tu turno
+Añade a la matriz a una fila que contenga el número pi repetido tantas veces como sea necesario. Añade a la matriz resultante, una columna que contenga el número e repetido tantas veces como sea necesario. 
+
+```{r}
+## Tu código aquí
+```
+
+
+# Indexación de matrices
+
+Al igual que en los vectores, utilizaremos los corchetes [ ] para indexar matrices. En el caso particular de las matrices usaremos dos números enteros: uno para la fila y otro para la columna [row, column] Para seleccionar todos los elementos de una fila o una columna, basta con no incluir ningún número antes o después de la coma, respectivamente.
+
+Como con vectores, podemos indexar por posición, por valor, y por nombre. ¿Qué selecciones hacen los siguientes comandos?
+
+```{r}
+a[3,]
+a[1,2]
+a[-c(1,2),3]
+a[a == 3]
+a[a > 3]
+```
+
+Podemos dar nombres a los elementos de las matrices de la siguiente forma
+
+```{r}
+colnames(a) <- c("c1", "c2", "c3")
+rownames(a) <- c("r1", "r2", "r3")
+a
+```
+
+Para seleccionar por nombre
+```{r}
+a[c("r1", "r3"), c("c2", "c3")]
+```
+
+# Arrays
+
+Las arrays son generalizaciones de los vectores y matrices a dimensiones más altas. Es decir, Los vectores y las matrices son casos especiales de arrays Los vectores con una dimensión y las matrices con dos.
+
+Se crean indicando la dimensión
+```{r}
+a <- array(1:18, dim = c(3,3,2))
+a
+```
+
+Para indexar, usamos tres números
+
+```{r}
+a[1, c(1,3), -1]
+```
+
+
+
+# Ejercicios
+
+1. Los siguientes vectores contienen la recaudación (en cientos de miles de dólares) de las tres primeras películas de Star Wars en US (primer elemento) y fuera de US (segundo elemento)
+
+```{r}
+new_hope <- c(461, 314.4)
+empire_strikes <- c(290.5, 247.9)
+return_jedi <- c(309.3, 165.8)
+```
+
+Crea una matriz que contenga toda la información (con tres filas)
+Pon nombres a las columnas: "US" y "non-US"
+Ponl nombres a las filas: "A New Hope", "The Empire Strikes Back" y "Return of the Jedi"
+
+2. Si el precio de la entrada es de 5$, estima el número de espectadores de cada película.
+
+3. Calcula el numero de espectadores medio en US y fuera de US
+
+4. Calcula los totales de recaudación por película
+
+5. Añade el vector anterior con los totales por películacula como una nueva columna de la matriz
+
+6. Crea una nueva matriz con las recaudaciones de las siguientes tres películas de Star Wars
+
+```{r}
+phantom_menace <- c(474.5, 552.5)
+attack_clones <- c(310.7, 338.7)
+revenge_sith <- c(380.3, 468.5)
+```
+
+7. Calcula la media recaudada de las 2 primeras películas fuera de US
+
+8. Crea un script de R que resuelva un sistema de dos ecuaciones especificado por el usuario. Para ello, primero has de especificar la matriz del sistema y sus términos independientes. El script ha de imprimir por pantalla y por orden, los siguientes mensajes:
+
+* "Resolviendo el sistema cuya matriz es:"
+*  Matriz del sistema
+* "y sus términos independientes son:
+* Vector de términos independientes.
+* "La solución es:"
+* Solución
+
