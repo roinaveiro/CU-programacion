@@ -1,0 +1,266 @@
+---
+title: "Untitled"
+author: "Tu nombre aquí"
+date: "2023-02-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Dataframes
+
+Los dataframes conforman la estructura de almacenamiento más útil para el análisis de datos. Puedes pensar en un dataframe como el equivalente de R a la hoja de cálculo de Excel porque almacena datos en un formato similar.
+
+Los marcos de datos agrupan vectores en una tabla bidimensional. Cada vector se convierte en una columna en la tabla. Como resultado, cada columna de un dataframe puede contener un tipo diferente de datos; pero dentro de una columna, cada celda debe tener el mismo tipo de datos
+
+Crear un marco de datos a mano requiere escribir mucho, pero puedes hacerlo con la función `data.frame`. Para ello, proporciona a `data.frame` cualquier número de vectores, cada uno separado por una coma. Cada vector debe establecerse igual a un nombre que describa el vector. `data.frame` convertirá cada vector en una columna del nuevo marco de datos:
+
+```{r}
+df <- data.frame(club = c("Liberty", "Mondo", "Ocho y Medio"),  
+  musica = c("Comercial", "Electrónica", "Indie"), nota = c(3, 7, 8.5))
+df
+```
+
+¡Podéis poner los nombres que queráis!
+
+¿Qué hacen las siguientes funciones?
+
+```{r}
+head(df)
+tail(df)
+str(df)
+summary(df)
+colnames(df)
+```
+
+Puedes visualizar el dataframe con `View(df)`.
+
+Observa que R guardó los caracteres como factores. Se puede evitar este comportamiento agregando el argumento stringsAsFactors = FALSE a `data.frame`:
+
+```{r}
+df <- data.frame(club = c("Liberty", "Mondo", "Ocho y Medio"),  
+  musica = c("Comercial", "Electrónica", "Indie"), nota = c(3, 7, 8.5), stringsAsFactors = F)
+df
+```
+
+# Leer y escribir dataframes
+
+## Lectura de dataframes
+
+```{r}
+casas <- read.csv("houses_Madrid.csv")
+```
+
+Hay que especificar la ruta a los datos respectiva al directorio de trabajo de R!!
+
+## Tu turno
+
+¿Qué variables recoge este dataframe?
+
+```{r}
+## Código aquí
+```
+
+
+## Escritura de datos
+
+```{r}
+write.csv(df, row.names = F)
+```
+
+# Juntar dataframes
+
+```{r}
+clubes1 <- data.frame(club = c("Liberty", "Mondo", "Ocho y Medio"),  
+  musica = c("Comercial", "Electrónica", "Indie"), nota = c(3, 7, 8.5))
+
+clubes2 <- data.frame(club = c("Cats"),  
+  musica = c("Comercial"), nota = c(2))
+
+clubes <- rbind(clubes1, clubes2)
+
+clubes
+```
+
+```{r}
+precios <- data.frame(precio = c(25, 25, 20, 15))
+
+clubes <- cbind(clubes, precios)
+
+clubes
+```
+
+```{r}
+precios <- data.frame(precio = c(25, 25, 20, 15))
+
+clubes <- cbind(clubes, precios)
+
+clubes
+```
+
+Unión con diferentes variables
+
+```{r}
+clubes1 <- data.frame(club = c("Liberty", "Mondo"),  
+  musica = c("Comercial", "Electrónica"))
+
+clubes2 <- data.frame(club = c("Mondo", "Ocho y Medio", "Cats"),  
+  nota = c(7, 8.5, 2))
+
+merge(clubes1, clubes2, by = c("club"), all=T)
+```
+
+## Tú turno
+
+¿Qué pasa si ponemos `all=F`? Explícate
+
+```{r}
+# Código
+```
+
+
+# Indexar dataframes
+
+Volvemos sobre el dataframe
+
+```{r}
+df <- data.frame(club = c("Liberty", "Mondo", "Ocho y Medio"),  
+  musica = c("Comercial", "Electrónica", "Indie"), nota = c(3, 7, 8.5))
+```
+
+Selección con números enteros
+
+```{r}
+# Selección con números enteros
+df[1,2]
+
+# Más de un elemento
+df[1:2, 2:3]
+```
+
+
+Selección con enteros negativos
+
+```{r}
+# Selección con enteros negativos
+df[-c(1,2),1:3]
+
+# Selección con espacios
+df[,-2]
+
+# Selección con variables lógicas
+df[1,c(TRUE, TRUE, FALSE)]
+
+
+```
+
+Selección con nombres
+
+```{r}
+# Selección con nombres
+df[c(1,3), "musica"]
+
+# Selección de columnas con $
+df$musica
+```
+
+¡Con expresiones lógicas!
+
+```{r}
+# Seleccinar los que ponen música comercial
+df[df$musica == "Comercial", ]
+
+# Seleccinar los que aprueban
+df[df$nota > 5, ]
+```
+
+Se pueden combinar expresiones lógicas con operadores Booleanos
+```{r}
+exp1 <- 5>3
+exp2 <- "A" != "A"
+exp3 <- 3 %in% c(1,2,3)
+
+# AND
+exp1 & exp2
+
+# OR
+exp1 | exp2
+
+# Negación
+!exp1
+```
+
+Se pueden combinar expresiones lógicas con operadores Booleanos
+
+```{r}
+# Any
+any(exp1, exp2, exp3)
+
+# All
+all(exp1, exp2, exp3)
+
+
+```
+
+
+
+```{r}
+# Seleccionar que ponen música electrónica y aprueban 
+df[df$musica == "Electrónica" & df$nota > 5,]
+```
+
+
+# Ejercicios
+
+Trabajaremos con los datos de casas de Madrid. Recuerda, lo cargamos así
+
+```{r}
+casas <- read.csv("houses_Madrid.csv")
+```
+
+
+1. Comprueba el contenido del data frame.
+
+2. Selecciona la información de las dos primeras casas.
+
+3. Selecciona la información de las tres últimas casas.
+
+4. Selecciona el precio de alquiler de las seis últimas casas. El precio de alquiler viene en `rent_price`.
+
+5. Selecciona los que tienen más de 3 de baños. El número de baños en `n_bathrooms`.
+
+6. Selecciona las casas con más de dos baños cuyo precio de alquiler es inferior a 600. 
+
+7. La función order devuelve las posiciones de un vector ordenado ascendentemente
+
+```{r}
+a <- c(4, 10, 3)
+order(a)
+a[order(a)]
+```
+
+Ordena el data frame según el precio de venta. Esta información viene en `buy_price`.
+
+8. Selecciona los pisos que estén al alguno de estos barrios: Chopera, Delicias, Arganzuela. La variable que recoge esta información es `subtitle`.
+
+9. Crea un dataframe con la siguiente información de los 10 pisos más caros:
+
+* Precio de venta
+* Precio de alquiler
+* Latitud
+* Longitud
+* Metros cuadrados
+* Número de baños
+
+Escribe en un fichero llamado `caros.csv` que contenga estos datos.
+
+
+
+
+
+
+
+
