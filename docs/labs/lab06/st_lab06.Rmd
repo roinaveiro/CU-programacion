@@ -1,0 +1,222 @@
+---
+title: "Untitled"
+author: "Tu nombre aquí"
+date: "2023-03-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Listas
+
+Las listas son como vectores atómicos porque agrupan datos en un conjunto unidimensional. Sin embargo, las listas no agrupan valores individuales; las listas agrupan objetos R, como vectores atómicos, matrices u otras listas. Por ejemplo, se puede crear una lista que contenga un vector numérico de longitud 10 en su primer elemento, un vector de caracteres de longitud 1 en su segundo elemento y un dataframe de 10 filas y dos columnas en su tercer elemento. Para hacer esto, se usa la función `list`.
+
+```{r}
+list1 <- list(8:20, "Marzo", list(TRUE, FALSE), mtcars)
+```
+
+Los índices entre corchetes indican qué elemento de la lista se está mostrando. Los índices de un solo corchete indican qué subelemento de un elemento se muestra. Por ejemplo, 8 es el primer subelemento del primer elemento de la lista. "Marzo" es el primer subelemento del segundo elemento. Esta notación de dos sistemas surge porque cada elemento de una lista puede ser cualquier objeto R, incluido un nuevo vector (o lista) con sus propios índices.
+
+
+La estructura de las listas puede volverse bastante complicada, pero esta flexibilidad hace que las listas sean una herramienta de almacenamiento útil para todo uso en R: se puede agrupar cualquier cosa con una lista.
+
+Para acceder a un elemento particular de la lista, usamos la notación de doble corchete.
+
+```{r}
+list1[[4]]
+```
+
+Una vez accedemos a un elemento, podemos indexarlo utilizando las reglas vistas según el tipo de datos!
+
+## Tu turno
+
+Del dataframe contenido en `list1`, extrae los coches que o bien pesen más de 2.7 o bien tengan `mpg` menor que 21.
+
+```{r}
+# Tu código aquí
+```
+
+También podemos crear listas nombrando sus elementos
+
+```{r}
+list1 <- list(secuencia = 8:20, mes = "Marzo", logico = list(TRUE, FALSE), coches = mtcars)
+```
+
+En este caso, podemos acceder a un elemento utilizando `$` seguido del nombre. También podemos usar dobles corchetes.
+
+```{r}
+list1$secuencia
+list1[["secuencia"]]
+```
+
+## Tu turno
+
+Extrae los múltiplos de 3 contenidos en el elemento llamado secuencia de list1.
+
+```{r}
+# Tu código aquí
+```
+
+
+
+La función `unlist()` convierte  una lista en un vector. Para ello, concatena sus elementos y los convierte al mismo formato.
+
+```{r}
+list2 <- list(1:10, c(4,3,2), 2, 7*3)
+unlist(list2)
+```
+
+Podemos añadir elementos nuevos a una lista usando `c()`
+
+```{r}
+list_new <- c(list2, otro_elemento = list(c("a", "b")) )
+list_new
+```
+
+## Tu turno
+
+¿Qué sucede si accedemos a un elemento de una lista usando corchete simple en lugar de corchete doble?
+
+
+
+# Fechas
+
+Para trabajar con fechas en R, usamos una clase llamada `Date`.
+
+```{r}
+fecha <- as.Date("1993-05-17")
+class(fecha)
+```
+
+Al crear una fecha, hay que especificar el formato. Esto lo hacemos añadiendo una variable format de tipo caracter con la siguiente información:
+
+Días
+
+* %d = día (0 a 31)
+* %a = día de la semana (nombre abreviado con tres letras)
+* %A = día de la semana (nombre completo)
+
+Meses
+
+* %m = mes (1 a 12)
+* %b = mes (nombre abreviado con tres letras)
+* %B = mes (nombre completo)
+
+Años
+
+* %y = año con dos dígitos
+* %Y = año con cuatro dígitos
+
+Por ejemplo
+
+```{r}
+as.Date("6 of March of 2023", format="%d of %B of %Y")
+as.Date("06/03/23", format="%d/%m/%y")
+as.Date("06-Mar-23", format="%d-%b-%y")
+```
+
+Con `format()`, podemos además extraer información de un fecha
+
+```{r}
+fecha <- as.Date("06-Mar-23", format="%d-%b-%y")
+# Día de la semana abreviado
+format(fecha, "%a")
+# Día de la semana 
+format(fecha, "%A")
+# Mes 
+format(fecha, "%B")
+# Mes abreviado
+format(fecha, "%b")
+```
+
+También podemos realizar esta operación sobre vectores de fechas
+
+```{r}
+fecha1 <- as.Date("06-Mar-23", format="%d-%b-%y")
+fecha2 <- as.Date("07-Mar-23", format="%d-%b-%y")
+
+format(c(fecha1, fecha2), "%a")
+```
+
+También podemos realizar operaciones aritméticas y lógicas sencillas sobre fechas
+
+```{r}
+# Añadir un día
+fecha1 + 1 
+
+# Restar
+fecha2 - fecha1
+
+# Comparar
+fecha1 + 1 == fecha2
+```
+
+Ojo: no todas las operaciones sobre fechas están definidas.
+
+Por último, así obtenemos la fecha actual
+
+```{r}
+Sys.Date()
+
+Sys.time()
+```
+
+# Ejercicios
+
+Vamos a trabajar con los siguientes elementos
+
+```{r}
+actors <- c("Jack Nicholson", "Shelley Duvall", "Danny Lloyd", "Scatman Crothers", "Barry Nelson")
+
+scores <- c(4.5, 4.0, 5.0)
+
+sources <- c("IMDb1", "IMDb2", "IMDb3")
+
+comments <- c("Best Horror Film I Have Ever Seen", "A truly brilliant and scary film from Stanley Kubrick", "A masterpiece of psychological horror")
+
+reviews <- data.frame(scores, sources, comments)
+```
+
+
+1. Crea una lista que contenga los siguientes componentes (con los nombres que se dan)
+
+  * moviename: "The Shining"
+  * actors: el vector de actores
+  * reviews: el data frame de reviews
+
+
+2. Selecciona el último actor del vector de actores de la lista
+
+
+3. Selecciona la segunda de las críticas del data frame de reviews de la lista
+
+4. Añade un nuevo elemento a lista:
+
+  * year: 1980
+
+5. Comprueba el contenido de la lista empleando la función str
+
+6. Transforma a fechas cada una de los siguientes textos.
+
+```{r}
+d1 <- "January 01, 2010"
+d2 <- "2015-Mar-07"
+d3 <- "06-Jun-2017"
+d4 <- c("August 19 (2015)", "July 1 (2015)")
+```
+
+Ojo, si tu R está en español, usa esto:
+
+```{r}
+d1 <- "Enero 01, 2010"
+d2 <- "2015-Mar-07"
+d3 <- "06-Jun-2017"
+d4 <- c("Agosto 19 (2015)", "Julio 1 (2015)")
+```
+
+7. Calcula cuántos días pasaron desde que naciste
+
+

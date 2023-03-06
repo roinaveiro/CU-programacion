@@ -11,7 +11,7 @@
 
 
 
-<title>Programación</title>
+<title>Lab 06 - Listas en R</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1465,6 +1465,26 @@ padding-right: 0;
 padding-left: 90px;
 font-size: 13pt;
 }
+ol>li:before {
+
+content: "Question " counter(li)".";
+
+counter-increment: li;
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+}
+ol ol>li:before {
+counter-reset: sub-item;
+
+
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+padding-left: 90px;
+}
 .td {
 font-size: 10pt;
 }
@@ -1626,9 +1646,7 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore"><strong>Programación</strong></h1>
-<h3 class="subtitle">CUNEF Universidad</h3>
-<h4 class="date">Página actualizada: 2023-03-06</h4>
+<h1 class="title toc-ignore">Lab 06 - Listas en R</h1>
 
 </div>
 
@@ -1636,19 +1654,236 @@ border-radius: 0px;
 <div class="title-logo">
 
 </div>
-<p>Esta es la página del curso de Programación creado por <a href="http://roinaveiro.github.io">Roi Naveiro</a></p>
-<div id="laboratorios" class="section level2">
-<h2><strong>Laboratorios</strong></h2>
+<div id="listas" class="section level1">
+<h1>Listas</h1>
+<p>Las listas son como vectores atómicos porque agrupan datos en un
+conjunto unidimensional. Sin embargo, las listas no agrupan valores
+individuales; las listas agrupan objetos R, como vectores atómicos,
+matrices u otras listas. Por ejemplo, se puede crear una lista que
+contenga un vector numérico de longitud 10 en su primer elemento, un
+vector de caracteres de longitud 1 en su segundo elemento y un dataframe
+de 10 filas y dos columnas en su tercer elemento. Para hacer esto, se
+usa la función <code>list</code>.</p>
+<pre class="r"><code>list1 &lt;- list(8:20, &quot;Marzo&quot;, list(TRUE, FALSE), mtcars)</code></pre>
+<p>Los índices entre corchetes indican qué elemento de la lista se está
+mostrando. Los índices de un solo corchete indican qué subelemento de un
+elemento se muestra. Por ejemplo, 8 es el primer subelemento del primer
+elemento de la lista. “Marzo” es el primer subelemento del segundo
+elemento. Esta notación de dos sistemas surge porque cada elemento de
+una lista puede ser cualquier objeto R, incluido un nuevo vector (o
+lista) con sus propios índices.</p>
+<p>La estructura de las listas puede volverse bastante complicada, pero
+esta flexibilidad hace que las listas sean una herramienta de
+almacenamiento útil para todo uso en R: se puede agrupar cualquier cosa
+con una lista.</p>
+<p>Para acceder a un elemento particular de la lista, usamos la notación
+de doble corchete.</p>
+<pre class="r"><code>list1[[4]]</code></pre>
+<pre><code>##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+## Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
+<p>Una vez accedemos a un elemento, podemos indexarlo utilizando las
+reglas vistas según el tipo de datos!</p>
+<div id="tu-turno" class="section level2">
+<h2>Tu turno</h2>
+<p>Del dataframe contenido en <code>list1</code>, extrae los coches que
+o bien pesen más de 2.7 o bien tengan <code>mpg</code> menor que 21.</p>
+<pre class="r"><code># Tu código aquí</code></pre>
+<p>También podemos crear listas nombrando sus elementos</p>
+<pre class="r"><code>list1 &lt;- list(secuencia = 8:20, mes = &quot;Marzo&quot;, logico = list(TRUE, FALSE), coches = mtcars)</code></pre>
+<p>En este caso, podemos acceder a un elemento utilizando <code>$</code>
+seguido del nombre. También podemos usar dobles corchetes.</p>
+<pre class="r"><code>list1$secuencia</code></pre>
+<pre><code>##  [1]  8  9 10 11 12 13 14 15 16 17 18 19 20</code></pre>
+<pre class="r"><code>list1[[&quot;secuencia&quot;]]</code></pre>
+<pre><code>##  [1]  8  9 10 11 12 13 14 15 16 17 18 19 20</code></pre>
+</div>
+<div id="tu-turno-1" class="section level2">
+<h2>Tu turno</h2>
+<p>Extrae los múltiplos de 3 contenidos en el elemento llamado secuencia
+de list1.</p>
+<pre class="r"><code># Tu código aquí</code></pre>
+<p>La función <code>unlist()</code> convierte una lista en un vector.
+Para ello, concatena sus elementos y los convierte al mismo formato.</p>
+<pre class="r"><code>list2 &lt;- list(1:10, c(4,3,2), 2, 7*3)
+unlist(list2)</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10  4  3  2  2 21</code></pre>
+<p>Podemos añadir elementos nuevos a una lista usando
+<code>c()</code></p>
+<pre class="r"><code>list_new &lt;- c(list2, otro_elemento = list(c(&quot;a&quot;, &quot;b&quot;)) )
+list_new</code></pre>
+<pre><code>## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[2]]
+## [1] 4 3 2
+## 
+## [[3]]
+## [1] 2
+## 
+## [[4]]
+## [1] 21
+## 
+## $otro_elemento
+## [1] &quot;a&quot; &quot;b&quot;</code></pre>
+</div>
+<div id="tu-turno-2" class="section level2">
+<h2>Tu turno</h2>
+<p>¿Qué sucede si accedemos a un elemento de una lista usando corchete
+simple en lugar de corchete doble?</p>
+</div>
+</div>
+<div id="fechas" class="section level1">
+<h1>Fechas</h1>
+<p>Para trabajar con fechas en R, usamos una clase llamada
+<code>Date</code>.</p>
+<pre class="r"><code>fecha &lt;- as.Date(&quot;1993-05-17&quot;)
+class(fecha)</code></pre>
+<pre><code>## [1] &quot;Date&quot;</code></pre>
+<p>Al crear una fecha, hay que especificar el formato. Esto lo hacemos
+añadiendo una variable format de tipo caracter con la siguiente
+información:</p>
+<p>Días</p>
 <ul>
-<li><a href="./labs/lab01/lab01.html">Lab 01 - Introducción a R</a></li>
-<li><a href="./labs/lab02/lab02.html">Lab 02 - Vectores en R</a></li>
-<li><a href="./labs/lab03/lab03.html">Lab 03 - Factores en R</a></li>
-<li><a href="./labs/lab04/lab04.html">Lab 04 - Matrices in Arrays en
-R</a></li>
-<li><a href="./labs/lab05/lab05.html">Lab 05 - Dataframes en R</a></li>
-<li><a href="./labs/lab06/lab06.html">Lab 06 - Listas y Fechas en
-R</a></li>
+<li>%d = día (0 a 31)</li>
+<li>%a = día de la semana (nombre abreviado con tres letras)</li>
+<li>%A = día de la semana (nombre completo)</li>
 </ul>
+<p>Meses</p>
+<ul>
+<li>%m = mes (1 a 12)</li>
+<li>%b = mes (nombre abreviado con tres letras)</li>
+<li>%B = mes (nombre completo)</li>
+</ul>
+<p>Años</p>
+<ul>
+<li>%y = año con dos dígitos</li>
+<li>%Y = año con cuatro dígitos</li>
+</ul>
+<p>Por ejemplo</p>
+<pre class="r"><code>as.Date(&quot;6 of March of 2023&quot;, format=&quot;%d of %B of %Y&quot;)</code></pre>
+<pre><code>## [1] &quot;2023-03-06&quot;</code></pre>
+<pre class="r"><code>as.Date(&quot;06/03/23&quot;, format=&quot;%d/%m/%y&quot;)</code></pre>
+<pre><code>## [1] &quot;2023-03-06&quot;</code></pre>
+<pre class="r"><code>as.Date(&quot;06-Mar-23&quot;, format=&quot;%d-%b-%y&quot;)</code></pre>
+<pre><code>## [1] &quot;2023-03-06&quot;</code></pre>
+<p>Con <code>format()</code>, podemos además extraer información de un
+fecha</p>
+<pre class="r"><code>fecha &lt;- as.Date(&quot;06-Mar-23&quot;, format=&quot;%d-%b-%y&quot;)
+# Día de la semana abreviado
+format(fecha, &quot;%a&quot;)</code></pre>
+<pre><code>## [1] &quot;Mon&quot;</code></pre>
+<pre class="r"><code># Día de la semana 
+format(fecha, &quot;%A&quot;)</code></pre>
+<pre><code>## [1] &quot;Monday&quot;</code></pre>
+<pre class="r"><code># Mes 
+format(fecha, &quot;%B&quot;)</code></pre>
+<pre><code>## [1] &quot;March&quot;</code></pre>
+<pre class="r"><code># Mes abreviado
+format(fecha, &quot;%b&quot;)</code></pre>
+<pre><code>## [1] &quot;Mar&quot;</code></pre>
+<p>También podemos realizar esta operación sobre vectores de fechas</p>
+<pre class="r"><code>fecha1 &lt;- as.Date(&quot;06-Mar-23&quot;, format=&quot;%d-%b-%y&quot;)
+fecha2 &lt;- as.Date(&quot;07-Mar-23&quot;, format=&quot;%d-%b-%y&quot;)
+
+format(c(fecha1, fecha2), &quot;%a&quot;)</code></pre>
+<pre><code>## [1] &quot;Mon&quot; &quot;Tue&quot;</code></pre>
+<p>También podemos realizar operaciones aritméticas y lógicas sencillas
+sobre fechas</p>
+<pre class="r"><code># Añadir un día
+fecha1 + 1 </code></pre>
+<pre><code>## [1] &quot;2023-03-07&quot;</code></pre>
+<pre class="r"><code># Restar
+fecha2 - fecha1</code></pre>
+<pre><code>## Time difference of 1 days</code></pre>
+<pre class="r"><code># Comparar
+fecha1 + 1 == fecha2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Ojo: no todas las operaciones sobre fechas están definidas.</p>
+<p>Por último, así obtenemos la fecha actual</p>
+<pre class="r"><code>Sys.Date()</code></pre>
+<pre><code>## [1] &quot;2023-03-06&quot;</code></pre>
+<pre class="r"><code>Sys.time()</code></pre>
+<pre><code>## [1] &quot;2023-03-06 17:24:24 CET&quot;</code></pre>
+</div>
+<div id="ejercicios" class="section level1">
+<h1>Ejercicios</h1>
+<p>Vamos a trabajar con los siguientes elementos</p>
+<pre class="r"><code>actors &lt;- c(&quot;Jack Nicholson&quot;, &quot;Shelley Duvall&quot;, &quot;Danny Lloyd&quot;, &quot;Scatman Crothers&quot;, &quot;Barry Nelson&quot;)
+
+scores &lt;- c(4.5, 4.0, 5.0)
+
+sources &lt;- c(&quot;IMDb1&quot;, &quot;IMDb2&quot;, &quot;IMDb3&quot;)
+
+comments &lt;- c(&quot;Best Horror Film I Have Ever Seen&quot;, &quot;A truly brilliant and scary film from Stanley Kubrick&quot;, &quot;A masterpiece of psychological horror&quot;)
+
+reviews &lt;- data.frame(scores, sources, comments)</code></pre>
+<ol style="list-style-type: decimal">
+<li>Crea una lista que contenga los siguientes componentes (con los
+nombres que se dan)</li>
+</ol>
+<ul>
+<li>moviename: “The Shining”</li>
+<li>actors: el vector de actores</li>
+<li>reviews: el data frame de reviews</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Selecciona el último actor del vector de actores de la
+lista</p></li>
+<li><p>Selecciona la segunda de las críticas del data frame de reviews
+de la lista</p></li>
+<li><p>Añade un nuevo elemento a lista:</p></li>
+</ol>
+<ul>
+<li>year: 1980</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Comprueba el contenido de la lista empleando la función
+str</p></li>
+<li><p>Transforma a fechas cada una de los siguientes textos.</p></li>
+</ol>
+<pre class="r"><code>d1 &lt;- &quot;January 01, 2010&quot;
+d2 &lt;- &quot;2015-Mar-07&quot;
+d3 &lt;- &quot;06-Jun-2017&quot;
+d4 &lt;- c(&quot;August 19 (2015)&quot;, &quot;July 1 (2015)&quot;)</code></pre>
+<p>Ojo, si tu R está en español, usa esto:</p>
+<pre class="r"><code>d1 &lt;- &quot;Enero 01, 2010&quot;
+d2 &lt;- &quot;2015-Mar-07&quot;
+d3 &lt;- &quot;06-Jun-2017&quot;
+d4 &lt;- c(&quot;Agosto 19 (2015)&quot;, &quot;Julio 1 (2015)&quot;)</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Calcula cuántos días pasaron desde que naciste</li>
+</ol>
 </div>
 
 
