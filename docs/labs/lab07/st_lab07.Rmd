@@ -1,0 +1,312 @@
+---
+title: "Lab 07 - Estadística Descriptiva en R"
+author: "Tu nombre aquí"
+date: "2023-03-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Estadística Descriptiva Univariante
+
+La estadística descriptiva es un conjunto de técnicas numéricas y gráficas con las que se intenta descubrir la estructura interna de un conjunto de datos. La estadística descriptiva es una parte fundamental del análisis exploratorio de los datos, que podríamos definir como *el arte de observar los datos, generar hipótesis y testearlas*.
+
+El objetivo de la estadística descriptiva es pues el de generar preguntas prometedoras para, posteriormente, explorarlas en mayor profunidad.
+
+```{r pressure, echo=FALSE, out.width = '80%',  fig.align='center'}
+knitr::include_graphics("img/data-science-explore.png")
+```
+
+
+Es fundamental que la estadística descriptiva se realice de manera **reproducible**. De esta manera, cualquier persona puede replicar el análisis con el fin de cuestionarlo, criticarlo o reafirmarlo. Actualmente existen múltiples herramientas que garantizan la reproducibilidad del análisis de datos.
+Una herramienta fundamental es **R (y su interfaz RStudio)**.
+
+En este laboratorio vamos a estudiar las técnicas fundamentales de estadística descriptiva haciendo uso del software R. 
+
+Utilizaremos como referencia el dataset `mtcars`. La base de datos `mtcars` de R contiene información extraída de la *1974 Motor Trend US magazine* acerca de 10 aspectos de diseño de rendimiento de 32 vehículos. Puedes ver las primeras lineas usando
+
+```{r}
+head(mtcars)
+```
+
+Como sabes, puedes acceder a más información escribiendo en la consola `?mtcars`.
+Para acceder a los valores de cada variable para los 32 vehículos, se utiliza lo siguiente.
+```{r}
+# Valores de tipo de transmisión
+mtcars$am
+# Valores de peso de vehículo
+mtcars$wt
+# Valores de millas por galón
+mtcars$mpg
+```
+
+
+Antes de comenzar, revisamos los distintos tipos de datos que nos podemos encontrar.
+
+## Tipos de variables
+
+En principio, las variables con las que podemos trabajar serán númericas (cuantitativas) o categóricas (cualitativas):
+
+* **Variables numéricas**, pueden ser contínuas o discreatas: ¿La altura es? ¿El número de cigarros diarios es?
+
+* **Variables categóricas**, pueden ser ordinales si existe un orden natural entre sus niveles o no ordinales (nominales). ¿Talla de camiseta es? ¿Color de ojos?
+
+
+## Distribuciones de Frecuencias
+
+Crear una tabla de frecuencias en R requiere utilizar el comando `table()`. Por ejemplo
+
+```{r}
+table(mtcars$am)
+```
+
+muestra el número de coches (frecuencia simple) con transmisión automática (`am = 0`) y el número de coches con transmisión manual (`am = 1`). 
+
+Para mostrar frecuencias relativas:
+
+```{r}
+table(mtcars$am) / length(mtcars$am)
+```
+
+También es sencillo elegir nombres más representativos para las columnas
+
+```{r}
+tabla_frecuencias <- table(mtcars$am)
+names(tabla_frecuencias) <- c("Transmisión Automática", "Transmisión Manual")
+tabla_frecuencias
+```
+
+Para obtener las frecuencias acumuladas utilizamos la función `cumsum()`
+
+```{r}
+cumsum(tabla_frecuencias)
+```
+
+Observemos qué sucede para una variable cuantitativa
+
+```{r}
+table(mtcars$mpg)
+```
+
+Como gran parte de los datos son diferentes, la mayor parte de frecuencias simples son 1. Podemos agrupar valores de la siguiente manera
+
+```{r}
+# Comprobamos el rango de la variable
+range(mtcars$mpg)
+
+# Creamos las clases de interés
+breaks = seq(10, 34, by=4)  
+
+# Creamos la tabla
+table( cut(mtcars$mpg, breaks, right = F)  )
+```
+
+## Medidas de tendencia central
+
+R cuenta con muchas funciones que permiten calcular directamente las medidas más características que se utilizan en estadística descriptiv sobre **variables numéricas**. Repasamos algunas de las más importantes utilizadas sobre la variable `mpg` (millas por galon de diferentes vehículos) 
+
+```{r}
+# Media
+mean(mtcars$mpg)
+
+# Mediana
+median(mtcars$mpg)
+
+# Percentil 25
+quantile(mtcars$mpg, 0.25)
+
+# Percentile 99
+quantile(mtcars$mpg, 0.99)
+
+# Unos cuantos percentiles
+quantile(mtcars$mpg)
+
+# Un resumen de la distribución de la variable
+summary(mtcars$mpg)
+
+```
+
+## Medidas de Dispersión
+
+A continuación, mostramos cómo calcular algunas de las medidas de dispersión más importantes
+
+```{r}
+# Rango
+range(mtcars$mpg)
+
+# Rango intercuartílico
+IQR(mtcars$mpg)
+
+# Desviación absoluta media
+mad(mtcars$mpg)
+
+# Cuasivarianza
+var(mtcars$mpg)
+
+# Raíz de cuasivarianza
+sd(mtcars$mpg)
+
+# varianza
+var(mtcars$mpg) * (length(mtcars$mpg)-1)/length(mtcars$mpg)
+
+# Obtencion de la varianza
+mean((mtcars$mpg-mean(mtcars$mpg))^2)
+
+# otro metodo
+sum((mtcars$mpg-mean(mtcars$mpg))^2)/length(mtcars$mpg)
+
+```
+
+## Medidas de forma
+
+Algunas de las medidas de asimetría y curtosis pueden calcularse utilizando el paquete `moments`.
+
+```{r}
+library(moments)
+
+# Coeficiente de asimetría
+skewness( rnorm(1000) )
+
+# Coeficiente de curtosis (+3)
+kurtosis( rnorm(1000) )
+
+```
+
+
+## Visualización
+
+En esta parte del laboratorio nos centraremos en reproducir en R alguno de los gráficos vistos en la teoría. 
+
+
+### Visualización de datos categóricos
+
+Una de las técnicas de visualización de datos cualitativos más importantes es el  **gráfico de barras**. Podemos representar un gráfico de barras en usando `barplot`:
+
+```{r}
+n_vehiculos = table(mtcars$am)
+barplot(n_vehiculos, names.arg=c("Automático", "Manual"), 
+        xlab="Tipo de Transmisión", ylab="Numero de vehículos", 
+        col="gray",
+        main = "Numero de vehículos según tipo de transmisión",
+        horiz = TRUE)
+```
+
+
+
+
+### Visualización de datos cuantitativos
+
+Para visualizar datos cuantitativos discretos, podemos usar el diagrama de barras de la misma forma que con datos cualitativos. Para datos cuantitativos contínuos, usamos el histograma, la función de densidad y el boxplot.
+Podemos representar un histograma utilizando `hist()`. Es sencillo superponer el gráfico de densidad al histograma.
+
+```{r}
+hist(mtcars$mpg, col="gray",
+     breaks = 15,
+     xlab="Millas por galón", 
+     prob=TRUE,
+     main="Histograma de la variable mpg")
+lines(density(mtcars$mpg))
+```
+
+Por último, hemos visto que el boxplot puede ser una representación de interés para una variable contínua
+
+```{r}
+boxplot(mtcars$mpg, col="gray", main="Diagrama de caja de la variable MPG")
+```
+
+# Estadística Descriptiva Bivariante
+
+## Distribuciones de Frecuencias
+Podemos crear tablas de frecuencias en R con más de una variable usando el comando `table()`. Por ejemplo
+
+```{r}
+table(mtcars$am, mtcars$cyl)
+```
+
+Podemos cambiar los nombres de filas y columnas
+
+```{r}
+tabla_coches <- table(mtcars$am, mtcars$cyl)
+rownames(tabla_coches) <- c("Automático", "Manual")
+
+colnames(tabla_coches) <- c("4 cilindros", "6 cilindros", "8 cilindros")
+
+tabla_coches
+```
+
+## Medidas de relación lineal entre variables (variables continuas)
+
+```{r}
+## Covarianza 
+cov(mtcars$mpg, mtcars$wt) 
+
+## Coeficiente de correlación de Pearson
+cor(mtcars$mpg, mtcars$wt) 
+
+## Matriz de covarianzas entre educ y salarios 
+cov(mtcars[,c("mpg", "wt")]) 
+
+## Matriz de correlaciones entre educ y salarios 
+cor(mtcars[,c("mpg", "wt")]) 
+```
+
+## Visualización
+
+### Visualización variables numérica-numérica
+
+Para esto utilizamos el gráfico de dispersión
+
+```{r}
+plot(mtcars$wt, mtcars$mpg, col='blue', lwd=1,
+     xlab="Peso", ylab="MPG")
+```
+
+Para visualizar varias variables
+
+```{r}
+pairs(mtcars[, c("mpg", "wt", "hp")])
+```
+
+
+### Visualización variables numérica-categórica
+
+Primero necesitamos convertir la variable categórica a tipo factor.
+
+```{r}
+mtcars$am <- factor(mtcars$am)
+levels(mtcars$am) <- c("Automático", "Manual")
+boxplot(mtcars$mpg ~ mtcars$am, xlab="Transmisión", ylab="Millas por galón")
+```
+
+
+
+# Ejercicios
+
+Utilizaremos los datos `empleados.csv` para este ejercicio. Primero de todo, carga los datos en R.
+
+1. Calcula el salario medio y mediano de hombres y mujeres
+
+2. Calcula el percentil 80 del salario de las mujeres con más de dos años de experiencia que ocupan puestos directivos
+
+3. Visualiza la distribución de salarios
+
+4. Crea un gráfico de barras donde se refleje el número de personas en cada nivel de la variable `raza_sexo`
+
+5. Representa la relación entre años de educación y salario
+
+6. Representa la relación entre salario y salario inicial
+
+7. Convierte la variable `fecha_nacimiento` a variable tipo fecha
+
+8. Calcula el salario medio de los nacidos antes de 1965 y los nacidos posteriormente
+
+9. Calcula el salario mediano, y el percentil 80 del salario de la gente que pertenecia a una minoría de los que no pertenecen a una minoría.
+
+10. Calcula la correlación entre el salario y los años de experiencia.
+
+11. Calcula la correlación entre el salario y los años de educacióon de los hombres nacidos después de 1965 que llevan más de 75 meses empleados.
+
+
