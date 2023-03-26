@@ -1,0 +1,217 @@
+---
+title: "Lab 08 - Importando y Exportando datos en R - Funciones"
+output:
+  html_document:
+    css: ./stat_labs.css
+    toc: yes
+    toc_float: yes
+    fig_caption: no
+    seal : False
+    includes:
+      after_body: insert-logo.html
+  pdf_document:
+    toc: yes
+---
+
+
+<div class="title-logo"></div>
+
+```{r packages_setup, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+
+# Importación y exportación de datos en R
+
+Algunos de los formatos de datos más habituales habituales son:
+
+* Ficheros de texto plano:csv, tsv, txt, ...
+
+* Excel
+
+* Otras herramientas estadísticas: SAS, STATA, SPSS
+
+* Bases de Datos 
+
+
+Existen numerosas funciones en R para cargar datos. Algunos ejemplos:
+
+* Fichero de texto plano: readr, **data.table**, **read.csv**
+
+* Excel: **readxl**
+
+
+* SAS, STATA, SPSS: haven, foreign
+
+* BD relacionales: RMySQL, RPostgreSQL, Roracle
+
+## read.table
+
+Esta función es muy versátil ya que permite configurar varios aspectos de la lectura. Para ello, dispone de parámetros como:
+
+* `header`: para indicar si el fichero tiene cabecera
+
+* `sep`: para indicar el separador de nuestro fichero: `sep=","`,         ` sep=" "`, `sep=";"` o `sep="\t"` (tabulaciones)
+
+
+* `stringsAsFactors`: para indicar si las cadenas de caracteres se         convertirán en factores
+
+* `skip`: número de filas a saltar.
+
+
+**La ruta al fichero es relativa al directorio de trabajo**
+Ya has aprendido cómo especificar un directorio de trabajo en R.
+
+
+## read.csv
+
+Es un caso particular de `read.table` para leer ficheros `.csv`. `read.table` es más flexible. Usamos `read.csv` cuando no necesitamos tanta flexibilidad. `read.csv` también permite especificar el separados, `header`, `stringsAsFactors`, `skip`...
+
+### Tu turno
+
+Lee los ficheros `gm67.txt`, `tgm67.txt` y `gm67.csv`. Juega con las opciones `header`, `sep` y `stringsAsFactors`. ¿Qué valores toman por defecto?
+
+## readxl
+
+Para leer excel, usamos la librería readxl. Tendrás que instalarla.
+
+```{r}
+library(readxl)
+df  <- read_excel("data/gm67.xlsx", col_names = T, sheet = 1)
+head(df)
+```
+
+¿Para qué sirven las opciones `col_names` y `sheet`?
+
+
+## write.table
+
+Esta función permite escribir ficheros. El primer argumento que recibe es el dataframe que queremos escribir. Otros argumentos importantes:
+
+* `file`: **ruta** del fichero **relativa al directorio de trabajo**
+* `sep`: separador
+* `row.names`: T/F queremos escribir nombres de filas 
+* `col.names`: T/F queremos escribir nombres de columnas
+
+## write.csv
+
+Similar al anterior, menos flexible.
+
+### Tu turno
+
+Selecciona los 15 países de América con mayor esperanza de vida de la base de datos leída anteriormente y guarda toda su información en un fichero `.txt`, utilizando la tabulación como separador y de tal forma que no aparezca el nombre de las filas. ¿Qué sucede si haces `row.names=T`?
+
+## load y save
+
+Las funciones `load` y `save` permiten guardar y cargar **objetos de R** en una extensión llamada `.RData`. 
+
+```{r}
+X = matrix(1:9, nrow=3)
+save(X, file="data/matrix.RData")
+```
+
+
+```{r}
+load(file="data/matrix.RData")
+```
+
+
+# Funciones en R
+
+Una función es un fragmento de código que realiza una determinada tarea. Consta de:
+
+* Argumentos: valores que la función utilizará para realizar algún tipo de cálculo.
+
+* Output: valores que devuelve. Resultado de la ejecución del código
+
+Las funciones se ejecutan escribiendo su nombre seguido por paréntesis.
+En cuanto a los argumentos:
+
+* Separados por coma
+
+* Pueden tener nombres o no.
+
+* Dos opciones: (1) especificar sin nombre por orden. (2) Especificar con nombre (orden irrelevante)
+
+* Si no se especifica el valor de un argumento, tomará su valor por defecto
+
+## Tu turno
+
+Usa la ayuda para determinar qué argumentos admite la función `sample`. Responde lo siguiente
+
+* ¿Algún argumento tiene nombre? ¿Qué valores por defecto toman estos?
+
+* Prueba a ejecutar sample especificando los argumentos sin nombre pero por orden, con nombre en cualquier orden, y sin especificar algún argumento.
+
+### Funciones predefinidas en R
+
+Son funciones que ya existen en R o en algún paquete. Hemos usado muchas. Importante utilizar la ayuda.
+
+La función `args()` muestra los argumentos de una función
+```{r, echo=TRUE}
+args(sample)
+```
+
+### Funciones definidas por el usuario
+
+Podemos crear nuestras propias funciones!
+Permiten definir operaciones de uso recurrente (no implementadas en R).
+
+```{r, echo=TRUE, eval=FALSE}
+una_funcion <- function(arg1=1, arg2=2)
+{
+  # Cuerpo de la función
+  return(x) # Output
+}
+```
+
+
+Por ejemplo: función que genera 10 números entre 1 y 100 y devuelva su suma
+
+```{r, echo=TRUE}
+gen2_1_100 <- function(){
+  nums <- sample(1:100, size = 2, replace = TRUE)
+  print(nums)
+  return(sum(nums))
+}
+```
+
+
+## Tu turno
+
+Modifica la función anterior para que reciba un argumento llamado n y otro upper_lim y genere n números al azar entre el 1 y upper_lim y devuelva su suma. Da un valor por defecto a upper_lim de 100.
+
+Prueba a llamar la función con y sin cada uno de los argumentos. ¿Qué observas?
+
+
+# Ejercicios
+
+1. Crea una función que reciba los coeficientes de una ecuación de segundo grado (a: coeficiente de x al cuadrado, b: coeficiente de x y c: término independiente) y devuelva sus dos soluciones.
+
+2. Crea una función que reciba el radio de una circunferencia, con valor por defecto igual a 1, y devuelva el perímetro y el área.
+
+3. Escribe una función que devuelva $k$ números, donde cada número es
+la suma de $n$ números escogidos al azar entre 1 y 100 (con reemplazamiento), divido entre n.
+
+Pinta un histograma con los resultados de $k=10000$ para $n=1$, $n=2$, $n=10$ y $n=100$.
+
+¿Qué observas?
+
+4. Simula la estrategia de ruleta que consiste en apostar 10 euros siempre al rojo.
+
+Para ello:
+
+  - Crea una función llamada `spin()` que devuelva un número muestreado al azar entre 0 y 36 (ambos incluidos).
+  
+  - Crea otra función llamada `compute_gain()` que tenga un argumento `q` referido a la cantidad de dinero de la apuesta, con valor por defecto de 10. Esta función, ha de generar un tirada de la ruleta y, en función del resultado, calcular la ganancia y devolverla. Recuerda que
+  
+    * Los números (1,3,7,9,19,21,23,25,27,12,14,16,18,30,32,34,36) tienen color rojo.
+    
+    * Los números (2,4,6,8,20,22,24,26,28,11,13,15,17,29,31,33,35) tienen color negro.
+    
+    * El cero no tiene color.
+    
+5. Carga en R el fichero `gm67.txt` saltándote las 20 primeras líneas. Calcula los 4 países con mayor esperanza de vida entre aquellos cuyo PIB per cápita está por debajo de 6000 dólares. 
+Da nombres informativos a las columnas y escribe estos datos en un fichero llamados `pobres_alta_esperanza.csv`.
+ 

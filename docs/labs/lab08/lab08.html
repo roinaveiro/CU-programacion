@@ -11,7 +11,7 @@
 
 
 
-<title>Programación</title>
+<title>Lab 08 - Importando y Exportando datos en R - Funciones</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1465,6 +1465,26 @@ padding-right: 0;
 padding-left: 90px;
 font-size: 13pt;
 }
+ol>li:before {
+
+content: "Question " counter(li)".";
+
+counter-increment: li;
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+}
+ol ol>li:before {
+counter-reset: sub-item;
+
+
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+padding-left: 90px;
+}
 .td {
 font-size: 10pt;
 }
@@ -1626,9 +1646,8 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore"><strong>Programación</strong></h1>
-<h3 class="subtitle">CUNEF Universidad</h3>
-<h4 class="date">Página actualizada: 2023-03-26</h4>
+<h1 class="title toc-ignore">Lab 08 - Importando y Exportando datos en R
+- Funciones</h1>
 
 </div>
 
@@ -1636,23 +1655,223 @@ border-radius: 0px;
 <div class="title-logo">
 
 </div>
-<p>Esta es la página del curso de Programación creado por <a href="http://roinaveiro.github.io">Roi Naveiro</a></p>
-<div id="laboratorios" class="section level2">
-<h2><strong>Laboratorios</strong></h2>
+<div id="importación-y-exportación-de-datos-en-r" class="section level1">
+<h1>Importación y exportación de datos en R</h1>
+<p>Algunos de los formatos de datos más habituales habituales son:</p>
 <ul>
-<li><a href="./labs/lab01/lab01.html">Lab 01 - Introducción a R</a></li>
-<li><a href="./labs/lab02/lab02.html">Lab 02 - Vectores en R</a></li>
-<li><a href="./labs/lab03/lab03.html">Lab 03 - Factores en R</a></li>
-<li><a href="./labs/lab04/lab04.html">Lab 04 - Matrices in Arrays en
-R</a></li>
-<li><a href="./labs/lab05/lab05.html">Lab 05 - Dataframes en R</a></li>
-<li><a href="./labs/lab06/lab06.html">Lab 06 - Listas y Fechas en
-R</a></li>
-<li><a href="./labs/lab07/lab07.html">Lab 07 - Estadística Descriptiva
-en R</a></li>
-<li><a href="./labs/lab08/lab08.html">Lab 08 - Importando y Exportando
-datos en R - Funciones</a></li>
+<li><p>Ficheros de texto plano:csv, tsv, txt, …</p></li>
+<li><p>Excel</p></li>
+<li><p>Otras herramientas estadísticas: SAS, STATA, SPSS</p></li>
+<li><p>Bases de Datos</p></li>
 </ul>
+<p>Existen numerosas funciones en R para cargar datos. Algunos
+ejemplos:</p>
+<ul>
+<li><p>Fichero de texto plano: readr, <strong>data.table</strong>,
+<strong>read.csv</strong></p></li>
+<li><p>Excel: <strong>readxl</strong></p></li>
+<li><p>SAS, STATA, SPSS: haven, foreign</p></li>
+<li><p>BD relacionales: RMySQL, RPostgreSQL, Roracle</p></li>
+</ul>
+<div id="read.table" class="section level2">
+<h2>read.table</h2>
+<p>Esta función es muy versátil ya que permite configurar varios
+aspectos de la lectura. Para ello, dispone de parámetros como:</p>
+<ul>
+<li><p><code>header</code>: para indicar si el fichero tiene
+cabecera</p></li>
+<li><p><code>sep</code>: para indicar el separador de nuestro fichero:
+<code>sep=&quot;,&quot;</code>, <code>sep=&quot; &quot;</code>, <code>sep=&quot;;&quot;</code> o
+<code>sep=&quot;\t&quot;</code> (tabulaciones)</p></li>
+<li><p><code>stringsAsFactors</code>: para indicar si las cadenas de
+caracteres se convertirán en factores</p></li>
+<li><p><code>skip</code>: número de filas a saltar.</p></li>
+</ul>
+<p><strong>La ruta al fichero es relativa al directorio de
+trabajo</strong> Ya has aprendido cómo especificar un directorio de
+trabajo en R.</p>
+</div>
+<div id="read.csv" class="section level2">
+<h2>read.csv</h2>
+<p>Es un caso particular de <code>read.table</code> para leer ficheros
+<code>.csv</code>. <code>read.table</code> es más flexible. Usamos
+<code>read.csv</code> cuando no necesitamos tanta flexibilidad.
+<code>read.csv</code> también permite especificar el separados,
+<code>header</code>, <code>stringsAsFactors</code>,
+<code>skip</code>…</p>
+<div id="tu-turno" class="section level3">
+<h3>Tu turno</h3>
+<p>Lee los ficheros <code>gm67.txt</code>, <code>tgm67.txt</code> y
+<code>gm67.csv</code>. Juega con las opciones <code>header</code>,
+<code>sep</code> y <code>stringsAsFactors</code>. ¿Qué valores toman por
+defecto?</p>
+</div>
+</div>
+<div id="readxl" class="section level2">
+<h2>readxl</h2>
+<p>Para leer excel, usamos la librería readxl. Tendrás que
+instalarla.</p>
+<pre class="r"><code>library(readxl)
+df  &lt;- read_excel(&quot;data/gm67.xlsx&quot;, col_names = T, sheet = 1)
+head(df)</code></pre>
+<pre><code>## # A tibble: 6 × 6
+##   country     continent  year lifeExp      pop gdpPercap  
+##   &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      
+## 1 Afghanistan Asia       1967 34.02   11537966 836.1971382
+## 2 Albania     Europe     1967 66.22    1984060 2760.196931
+## 3 Algeria     Africa     1967 51407   12760499 3246.991771
+## 4 Angola      Africa     1967 35985    5247469 5522.776375
+## 5 Argentina   Americas   1967 65634   22934225 8052.953021
+## 6 Australia   Oceania    1967 71.1    11872264 14526.12465</code></pre>
+<p>¿Para qué sirven las opciones <code>col_names</code> y
+<code>sheet</code>?</p>
+</div>
+<div id="write.table" class="section level2">
+<h2>write.table</h2>
+<p>Esta función permite escribir ficheros. El primer argumento que
+recibe es el dataframe que queremos escribir. Otros argumentos
+importantes:</p>
+<ul>
+<li><code>file</code>: <strong>ruta</strong> del fichero
+<strong>relativa al directorio de trabajo</strong></li>
+<li><code>sep</code>: separador</li>
+<li><code>row.names</code>: T/F queremos escribir nombres de filas</li>
+<li><code>col.names</code>: T/F queremos escribir nombres de
+columnas</li>
+</ul>
+</div>
+<div id="write.csv" class="section level2">
+<h2>write.csv</h2>
+<p>Similar al anterior, menos flexible.</p>
+<div id="tu-turno-1" class="section level3">
+<h3>Tu turno</h3>
+<p>Selecciona los 15 países de América con mayor esperanza de vida de la
+base de datos leída anteriormente y guarda toda su información en un
+fichero <code>.txt</code>, utilizando la tabulación como separador y de
+tal forma que no aparezca el nombre de las filas. ¿Qué sucede si haces
+<code>row.names=T</code>?</p>
+</div>
+</div>
+<div id="load-y-save" class="section level2">
+<h2>load y save</h2>
+<p>Las funciones <code>load</code> y <code>save</code> permiten guardar
+y cargar <strong>objetos de R</strong> en una extensión llamada
+<code>.RData</code>.</p>
+<pre class="r"><code>X = matrix(1:9, nrow=3)
+save(X, file=&quot;data/matrix.RData&quot;)</code></pre>
+<pre class="r"><code>load(file=&quot;data/matrix.RData&quot;)</code></pre>
+</div>
+</div>
+<div id="funciones-en-r" class="section level1">
+<h1>Funciones en R</h1>
+<p>Una función es un fragmento de código que realiza una determinada
+tarea. Consta de:</p>
+<ul>
+<li><p>Argumentos: valores que la función utilizará para realizar algún
+tipo de cálculo.</p></li>
+<li><p>Output: valores que devuelve. Resultado de la ejecución del
+código</p></li>
+</ul>
+<p>Las funciones se ejecutan escribiendo su nombre seguido por
+paréntesis. En cuanto a los argumentos:</p>
+<ul>
+<li><p>Separados por coma</p></li>
+<li><p>Pueden tener nombres o no.</p></li>
+<li><p>Dos opciones: (1) especificar sin nombre por orden. (2)
+Especificar con nombre (orden irrelevante)</p></li>
+<li><p>Si no se especifica el valor de un argumento, tomará su valor por
+defecto</p></li>
+</ul>
+<div id="tu-turno-2" class="section level2">
+<h2>Tu turno</h2>
+<p>Usa la ayuda para determinar qué argumentos admite la función
+<code>sample</code>. Responde lo siguiente</p>
+<ul>
+<li><p>¿Algún argumento tiene nombre? ¿Qué valores por defecto toman
+estos?</p></li>
+<li><p>Prueba a ejecutar sample especificando los argumentos sin nombre
+pero por orden, con nombre en cualquier orden, y sin especificar algún
+argumento.</p></li>
+</ul>
+<div id="funciones-predefinidas-en-r" class="section level3">
+<h3>Funciones predefinidas en R</h3>
+<p>Son funciones que ya existen en R o en algún paquete. Hemos usado
+muchas. Importante utilizar la ayuda.</p>
+<p>La función <code>args()</code> muestra los argumentos de una
+función</p>
+<pre class="r"><code>args(sample)</code></pre>
+<pre><code>## function (x, size, replace = FALSE, prob = NULL) 
+## NULL</code></pre>
+</div>
+<div id="funciones-definidas-por-el-usuario" class="section level3">
+<h3>Funciones definidas por el usuario</h3>
+<p>Podemos crear nuestras propias funciones! Permiten definir
+operaciones de uso recurrente (no implementadas en R).</p>
+<pre class="r"><code>una_funcion &lt;- function(arg1=1, arg2=2)
+{
+  # Cuerpo de la función
+  return(x) # Output
+}</code></pre>
+<p>Por ejemplo: función que genera 10 números entre 1 y 100 y devuelva
+su suma</p>
+<pre class="r"><code>gen2_1_100 &lt;- function(){
+  nums &lt;- sample(1:100, size = 2, replace = TRUE)
+  print(nums)
+  return(sum(nums))
+}</code></pre>
+</div>
+</div>
+<div id="tu-turno-3" class="section level2">
+<h2>Tu turno</h2>
+<p>Modifica la función anterior para que reciba un argumento llamado n y
+otro upper_lim y genere n números al azar entre el 1 y upper_lim y
+devuelva su suma. Da un valor por defecto a upper_lim de 100.</p>
+<p>Prueba a llamar la función con y sin cada uno de los argumentos. ¿Qué
+observas?</p>
+</div>
+</div>
+<div id="ejercicios" class="section level1">
+<h1>Ejercicios</h1>
+<ol style="list-style-type: decimal">
+<li><p>Crea una función que reciba los coeficientes de una ecuación de
+segundo grado (a: coeficiente de x al cuadrado, b: coeficiente de x y c:
+término independiente) y devuelva sus dos soluciones.</p></li>
+<li><p>Crea una función que reciba el radio de una circunferencia, con
+valor por defecto igual a 1, y devuelva el perímetro y el área.</p></li>
+<li><p>Escribe una función que devuelva <span class="math inline">\(k\)</span> números, donde cada número es la suma
+de <span class="math inline">\(n\)</span> números escogidos al azar
+entre 1 y 100 (con reemplazamiento), divido entre n.</p></li>
+</ol>
+<p>Pinta un histograma con los resultados de <span class="math inline">\(k=10000\)</span> para <span class="math inline">\(n=1\)</span>, <span class="math inline">\(n=2\)</span>, <span class="math inline">\(n=10\)</span> y <span class="math inline">\(n=100\)</span>.</p>
+<p>¿Qué observas?</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Simula la estrategia de ruleta que consiste en apostar 10 euros
+siempre al rojo.</li>
+</ol>
+<p>Para ello:</p>
+<ul>
+<li><p>Crea una función llamada <code>spin()</code> que devuelva un
+número muestreado al azar entre 0 y 36 (ambos incluidos).</p></li>
+<li><p>Crea otra función llamada <code>compute_gain()</code> que tenga
+un argumento <code>q</code> referido a la cantidad de dinero de la
+apuesta, con valor por defecto de 10. Esta función, ha de generar un
+tirada de la ruleta y, en función del resultado, calcular la ganancia y
+devolverla. Recuerda que</p>
+<ul>
+<li><p>Los números (1,3,7,9,19,21,23,25,27,12,14,16,18,30,32,34,36)
+tienen color rojo.</p></li>
+<li><p>Los números (2,4,6,8,20,22,24,26,28,11,13,15,17,29,31,33,35)
+tienen color negro.</p></li>
+<li><p>El cero no tiene color.</p></li>
+</ul></li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>Carga en R el fichero <code>gm67.txt</code> saltándote las 20
+primeras líneas. Calcula los 4 países con mayor esperanza de vida entre
+aquellos cuyo PIB per cápita está por debajo de 6000 dólares. Da nombres
+informativos a las columnas y escribe estos datos en un fichero llamados
+<code>pobres_alta_esperanza.csv</code>.</li>
+</ol>
 </div>
 
 

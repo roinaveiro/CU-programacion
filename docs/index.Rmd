@@ -37,5 +37,6 @@ Esta es la página del curso de Programación creado por
   - [Lab 05 - Dataframes en R](./labs/lab05/lab05.html)
   - [Lab 06 - Listas y Fechas en R](./labs/lab06/lab06.html)
   - [Lab 07 - Estadística Descriptiva en R](./labs/lab07/lab07.html)
+  - [Lab 08 - Importando y Exportando datos en R - Funciones](./labs/lab08/lab08.html)
   
   
