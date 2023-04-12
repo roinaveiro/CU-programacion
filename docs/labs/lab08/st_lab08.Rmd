@@ -30,7 +30,6 @@ Existen numerosas funciones en R para cargar datos. Algunos ejemplos:
 
 * Excel: **readxl**
 
-
 * SAS, STATA, SPSS: haven, foreign
 
 * BD relacionales: RMySQL, RPostgreSQL, Roracle
@@ -142,6 +141,12 @@ La función `args()` muestra los argumentos de una función
 args(sample)
 ```
 
+Para practicar, veamos alguna otra función de generación de números aleatorios.
+
+* La función `runinf()` genera números reales con distrubución uniforme entre un valor mínimo y un valor máximo. Tiene tres argumentos: el número de muestras a generar (`n`), el valor mínimo (`min`) y el valor máximo (`max`).
+
+* La función `rnorm()` genera números reales con distrubución normal. Tiene tres argumentos: el número de muestras a generar (`n`), la media (`mean`) y la desviación estándar (`sd`).
+
 ### Funciones definidas por el usuario
 
 Podemos crear nuestras propias funciones!
@@ -154,7 +159,6 @@ una_funcion <- function(arg1=1, arg2=2)
   return(x) # Output
 }
 ```
-
 
 Por ejemplo: función que genera 10 números entre 1 y 100 y devuelva su suma
 
@@ -180,14 +184,7 @@ Prueba a llamar la función con y sin cada uno de los argumentos. ¿Qué observa
 
 2. Crea una función que reciba el radio de una circunferencia, con valor por defecto igual a 1, y devuelva el perímetro y el área.
 
-3. Escribe una función que devuelva $k$ números, donde cada número es
-la suma de $n$ números escogidos al azar entre 1 y 100 (con reemplazamiento), divido entre n.
-
-Pinta un histograma con los resultados de $k=10000$ para $n=1$, $n=2$, $n=10$ y $n=100$.
-
-¿Qué observas?
-
-4. Simula la estrategia de ruleta que consiste en apostar 10 euros siempre al rojo.
+3. Simula la estrategia de ruleta que consiste en apostar 10 euros siempre al rojo.
 
 Para ello:
 
@@ -201,6 +198,9 @@ Para ello:
     
     * El cero no tiene color.
     
-5. Carga en R el fichero `gm67.txt` saltándote las 20 primeras líneas. Calcula los 4 países con mayor esperanza de vida entre aquellos cuyo PIB per cápita está por debajo de 6000 dólares. 
+4. Carga en R el fichero `gm67.txt` saltándote las 20 primeras líneas. Calcula los 4 países con mayor esperanza de vida entre aquellos cuyo PIB per cápita está por debajo de 6000 dólares. 
 Da nombres informativos a las columnas y escribe estos datos en un fichero llamados `pobres_alta_esperanza.csv`.
- 
+
+5. Genera 1000 muestras de una distribución normal de media 0 y desviación estándar 1 y represéntalas en un histograma. Prueba a modificar los valores de media y desviación estándar, ¿cómo afecta esto al histograma de la distribución?
+
+6. Genera 1000 muestras de una distribución uniforme entre 3 y 10 y represéntalas en un histograma.

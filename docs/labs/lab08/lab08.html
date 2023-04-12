@@ -1802,6 +1802,19 @@ función</p>
 <pre class="r"><code>args(sample)</code></pre>
 <pre><code>## function (x, size, replace = FALSE, prob = NULL) 
 ## NULL</code></pre>
+<p>Para practicar, veamos alguna otra función de generación de números
+aleatorios.</p>
+<ul>
+<li><p>La función <code>runinf()</code> genera números reales con
+distrubución uniforme entre un valor mínimo y un valor máximo. Tiene
+tres argumentos: el número de muestras a generar (<code>n</code>), el
+valor mínimo (<code>min</code>) y el valor máximo
+(<code>max</code>).</p></li>
+<li><p>La función <code>rnorm()</code> genera números reales con
+distrubución normal. Tiene tres argumentos: el número de muestras a
+generar (<code>n</code>), la media (<code>mean</code>) y la desviación
+estándar (<code>sd</code>).</p></li>
+</ul>
 </div>
 <div id="funciones-definidas-por-el-usuario" class="section level3">
 <h3>Funciones definidas por el usuario</h3>
@@ -1838,15 +1851,8 @@ segundo grado (a: coeficiente de x al cuadrado, b: coeficiente de x y c:
 término independiente) y devuelva sus dos soluciones.</p></li>
 <li><p>Crea una función que reciba el radio de una circunferencia, con
 valor por defecto igual a 1, y devuelva el perímetro y el área.</p></li>
-<li><p>Escribe una función que devuelva <span class="math inline">\(k\)</span> números, donde cada número es la suma
-de <span class="math inline">\(n\)</span> números escogidos al azar
-entre 1 y 100 (con reemplazamiento), divido entre n.</p></li>
-</ol>
-<p>Pinta un histograma con los resultados de <span class="math inline">\(k=10000\)</span> para <span class="math inline">\(n=1\)</span>, <span class="math inline">\(n=2\)</span>, <span class="math inline">\(n=10\)</span> y <span class="math inline">\(n=100\)</span>.</p>
-<p>¿Qué observas?</p>
-<ol start="4" style="list-style-type: decimal">
-<li>Simula la estrategia de ruleta que consiste en apostar 10 euros
-siempre al rojo.</li>
+<li><p>Simula la estrategia de ruleta que consiste en apostar 10 euros
+siempre al rojo.</p></li>
 </ol>
 <p>Para ello:</p>
 <ul>
@@ -1865,12 +1871,18 @@ tienen color negro.</p></li>
 <li><p>El cero no tiene color.</p></li>
 </ul></li>
 </ul>
-<ol start="5" style="list-style-type: decimal">
-<li>Carga en R el fichero <code>gm67.txt</code> saltándote las 20
+<ol start="4" style="list-style-type: decimal">
+<li><p>Carga en R el fichero <code>gm67.txt</code> saltándote las 20
 primeras líneas. Calcula los 4 países con mayor esperanza de vida entre
 aquellos cuyo PIB per cápita está por debajo de 6000 dólares. Da nombres
 informativos a las columnas y escribe estos datos en un fichero llamados
-<code>pobres_alta_esperanza.csv</code>.</li>
+<code>pobres_alta_esperanza.csv</code>.</p></li>
+<li><p>Genera 1000 muestras de una distribución normal de media 0 y
+desviación estándar 1 y represéntalas en un histograma. Prueba a
+modificar los valores de media y desviación estándar, ¿cómo afecta esto
+al histograma de la distribución?</p></li>
+<li><p>Genera 1000 muestras de una distribución uniforme entre 3 y 10 y
+represéntalas en un histograma.</p></li>
 </ol>
 </div>
 

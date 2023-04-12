@@ -289,24 +289,65 @@ Utilizaremos los datos `empleados.csv` para este ejercicio. Primero de todo, car
 
 1. Calcula el salario medio y mediano de hombres y mujeres
 
+```{r}
+empleados <- read.csv("data/empleados.csv")
+mean(empleados[empleados$sexo == "Hombre", "salario"])
+```
+
+
 2. Calcula el percentil 80 del salario de las mujeres con más de dos años de experiencia que ocupan puestos directivos
+
+```{r}
+mean( empleados[empleados$sexo == "Mujer" & empleados$meses_experiencia_previa >= 24 &
+              empleados$categoria == "Directivo", "salario"] )
+```
+
 
 3. Visualiza la distribución de salarios
 
+```{r}
+hist(empleados$salario, xlab="Salarios", main="Distribución de salarios")
+```
+
+
 4. Crea un gráfico de barras donde se refleje el número de personas en cada nivel de la variable `raza_sexo`
+
+```{r}
+barplot(table(empleados$raza_sexo))
+```
+
 
 5. Representa la relación entre años de educación y salario
 
+```{r}
+boxplot(empleados$salario~empleados$años_educacion )
+```
+
 6. Representa la relación entre salario y salario inicial
+
+```{r}
+plot(empleados$salario_inicial, empleados$salario)
+```
 
 7. Convierte la variable `fecha_nacimiento` a variable tipo fecha
 
+```{r}
+empleados$fecha_nacimiento <- as.Date(empleados$fecha_nacimiento, format = "%Y-%m-%d")
+```
+
 8. Calcula el salario medio de los nacidos antes de 1965 y los nacidos posteriormente
 
-9. Calcula el salario mediano, y el percentil 80 del salario de la gente que pertenecia a una minoría de los que no pertenecen a una minoría.
+```{r}
+empleados$año_nac <- as.numeric(format(empleados$fecha_nacimiento, format="%Y"))
+
+empleados[empleados$año_nac > 1965,"salario"]
+```
+
+9. Calcula el salario mediano, y el percentil 80 del salario de la gente que pertenecia a una minoría y de los que no pertenecen a una minoría.
+
 
 10. Calcula la correlación entre el salario y los años de experiencia.
 
-11. Calcula la correlación entre el salario y los años de educacióon de los hombres nacidos después de 1965 que llevan más de 75 meses empleados.
+11. Calcula la correlación entre el salario y los años de educación de los hombres nacidos después de 1965 que llevan más de 75 meses empleados.
 
 
