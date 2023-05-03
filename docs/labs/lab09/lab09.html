@@ -11,7 +11,7 @@
 
 
 
-<title>Programación</title>
+<title>Lab 09 - Condicionales y Bucles en R</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1465,6 +1465,26 @@ padding-right: 0;
 padding-left: 90px;
 font-size: 13pt;
 }
+ol>li:before {
+
+content: "Question " counter(li)".";
+
+counter-increment: li;
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+}
+ol ol>li:before {
+counter-reset: sub-item;
+
+
+position: absolute;
+color: #222222;
+left: -0.5px;
+font-weight: bold;
+padding-left: 90px;
+}
 .td {
 font-size: 10pt;
 }
@@ -1626,9 +1646,7 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore"><strong>Programación</strong></h1>
-<h3 class="subtitle">CUNEF Universidad</h3>
-<h4 class="date">Página actualizada: 2023-05-03</h4>
+<h1 class="title toc-ignore">Lab 09 - Condicionales y Bucles en R</h1>
 
 </div>
 
@@ -1636,26 +1654,288 @@ border-radius: 0px;
 <div class="title-logo">
 
 </div>
-<p>Esta es la página del curso de Programación creado por <a href="http://roinaveiro.github.io">Roi Naveiro</a></p>
-<div id="laboratorios" class="section level2">
-<h2><strong>Laboratorios</strong></h2>
+<p>Las condicionales y los bucles son las dos estructuras de
+programación más importantes cualquiera sea el lenguaje que
+utilicemos.</p>
 <ul>
-<li><a href="./labs/lab01/lab01.html">Lab 01 - Introducción a R</a></li>
-<li><a href="./labs/lab02/lab02.html">Lab 02 - Vectores en R</a></li>
-<li><a href="./labs/lab03/lab03.html">Lab 03 - Factores en R</a></li>
-<li><a href="./labs/lab04/lab04.html">Lab 04 - Matrices in Arrays en
-R</a></li>
-<li><a href="./labs/lab05/lab05.html">Lab 05 - Dataframes en R</a></li>
-<li><a href="./labs/lab06/lab06.html">Lab 06 - Listas y Fechas en
-R</a></li>
-<li><a href="./labs/lab07/lab07.html">Lab 07 - Estadística Descriptiva
-en R</a></li>
-<li><a href="./labs/lab08/lab08.html">Lab 08 - Importando y Exportando
-datos en R - Funciones</a></li>
-<li><a href="./labs/lab09/lab09.html">Lab 09 - Condicionales y Bucles en
-R - Funciones</a></li>
-<li><a href="./labs/lab10/lab10.html">Lab 10 - La Familia Apply -
-Introducción a dplyr</a></li>
+<li><p>Las condicionales permiten ejecutar cierto código en función de
+si se cumple una condición lógica.</p></li>
+<li><p>Los bucles permiten repetir cierto código un número específíco de
+veces.</p></li>
+</ul>
+<div id="condicionales" class="section level1">
+<h1>Condicionales</h1>
+<p>Mandan a R realizar una tarea si se cumple una condición, Su
+estructura es la siguiente</p>
+<pre class="r"><code>if (se cumple esto) {
+  haz esto
+}</code></pre>
+<p>Los <code>if</code> reciben una expresión lógica (<code>TRUE</code> o
+<code>FALSE</code>). Además, pueden anidarse</p>
+<pre class="r"><code>x &lt;- 7
+if(x &lt;= 8){
+  if(x&gt;=5){
+    print(&quot;Número en [5,8]&quot;)
+  }
+}</code></pre>
+<pre><code>## [1] &quot;Número en [5,8]&quot;</code></pre>
+<div id="tu-turno" class="section level2">
+<h2>Tu turno</h2>
+<p>Haz lo anterior con un único <code>if</code>.</p>
+<pre class="r"><code># Tú código aquí</code></pre>
+<p><code>if</code> se complementa con <code>else</code> mediante la
+siguiente estructura</p>
+<pre class="r"><code>if (se cumple esto) {
+  haz esto
+} else{
+  Sino haz esto otro
+}</code></pre>
+<p>Si hay más de dos condiciones, se puede usar <code>else if</code></p>
+<pre class="r"><code>if (se cumple esto) {
+  haz esto
+} else if(si se cumple esto){
+  haz esto otro
+} else{
+  sino haz esto
+}</code></pre>
+<p>Ejemplo: ¿cuál será el resultado del siguiente código?</p>
+<pre class="r"><code>x &lt;- 7
+if (x&gt;7) {
+  print(x + 3)
+} else if(x&lt;7){
+  print(x-3)
+} else{
+  print(x)
+}</code></pre>
+<p>La operación if-else puede realizarse en una línea con la función
+<code>ifelse</code>, que tiene la siguiente estructura.</p>
+<pre class="r"><code>ifelse(condicion, valor si TRUE, valor si FALSE)</code></pre>
+<p>Por ejemplo</p>
+<pre class="r"><code>x &lt;- 4
+ifelse(x==3, &quot;es tres&quot;, &quot;no es tres&quot;)</code></pre>
+<pre><code>## [1] &quot;no es tres&quot;</code></pre>
+<p>La operación <code>ifelse</code>, a diferencia de <code>if</code>;
+está <strong>vectorizada</strong>. Esto quiere decir que se aplica
+elemento a elemento sobre vectores. Por ejemplo</p>
+<pre class="r"><code>x &lt;- sample(1:10, 5, replace=T)
+ifelse(x%%2==0, &quot;Par&quot;, &quot;Impar&quot;)</code></pre>
+<pre><code>## [1] &quot;Impar&quot; &quot;Par&quot;   &quot;Par&quot;   &quot;Par&quot;   &quot;Par&quot;</code></pre>
+<p>Sin embargo, con <code>if-else</code></p>
+<pre class="r"><code>if(x%%2==0){
+  print(&quot;Par&quot;)
+}
+  else{
+    print(&quot;Impar&quot;)
+  }</code></pre>
+</div>
+</div>
+<div id="bucles" class="section level1">
+<h1>Bucles</h1>
+<p>Permiten repetir operaciones un cierto número de veces. Estudiaremos
+los bucles <code>for</code>, <code>while</code> y
+<code>repeat</code>.</p>
+<div id="bucles---for" class="section level2">
+<h2>Bucles - for</h2>
+<p>Repite un trozo de código muchas veces, una por cada elemento en un
+conjunto de entrada.</p>
+<pre class="r"><code>for(valor in conjunto){
+  haz esto
+}</code></pre>
+<p>En la primera iteración, la variable <strong>valor</strong> toma el
+primera valor del conjunto, en la segunda el segundo, y así
+sucesivamente.</p>
+<p>Ejemplo</p>
+<pre class="r"><code>for(valor in c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)){
+  print(&quot;Iterando&quot;)
+}</code></pre>
+<pre><code>## [1] &quot;Iterando&quot;
+## [1] &quot;Iterando&quot;
+## [1] &quot;Iterando&quot;</code></pre>
+<pre class="r"><code>for(valor in c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)){
+  print(valor)
+}</code></pre>
+<pre><code>## [1] &quot;A&quot;
+## [1] &quot;B&quot;
+## [1] &quot;C&quot;</code></pre>
+</div>
+<div id="tu-turno-1" class="section level2">
+<h2>Tu turno</h2>
+<p>Crea un código que sume los números múltiplos de 7 entre 1 y 100.</p>
+<pre class="r"><code># Tú código aquí</code></pre>
+</div>
+<div id="bucles---while" class="section level2">
+<h2>Bucles - while</h2>
+<p>Ejecuta un trozo de código mientras se cumple la condición de
+entrada</p>
+<pre class="r"><code>while(condicion){
+  haz esto
+}</code></pre>
+<p>Si la condición no se vuelve falsa en algún momento sino tendremos un
+bucle infinito</p>
+<p>Ejemplo</p>
+<pre class="r"><code>x &lt;- 1
+while(x &lt; 8){
+  print(x)
+  x &lt;- x + 1
+}</code></pre>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7</code></pre>
+</div>
+<div id="bucles---repeat" class="section level2">
+<h2>Bucles - repeat</h2>
+<p>Repite un secuencia de código hasta que se interrumpe con
+<code>break</code></p>
+<p>Ejemplo</p>
+<pre class="r"><code>i &lt;- 0
+repeat{
+  i &lt;- i +1
+  if (i &gt; 10) {break}  
+  print(i)
+    } </code></pre>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10</code></pre>
+<p>Para terminar, veremos un par de funcionalidades de interés que se
+utilizan para afectar el comportamiento de los bucles</p>
+</div>
+<div id="break" class="section level2">
+<h2>break</h2>
+<p>Rompe un bucle for, while o repeat. Al ejecutarse, salimos del
+bucle.</p>
+<pre class="r"><code>for(i in 1:15){
+  print(i)
+  if(i==3){break}
+}</code></pre>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3</code></pre>
+</div>
+<div id="next" class="section level2">
+<h2>next</h2>
+<p>Fuerza un salto en un bucle for al siguiente punto</p>
+<pre class="r"><code>x &lt;-  sample(-10:10, 10, replace=T)
+x</code></pre>
+<pre><code>##  [1]  -4   4  -5  -4 -10  -8  10   7  -3  -3</code></pre>
+<pre class="r"><code>for(n in x){
+  if(n&lt;0){
+  print(&quot;Número negativo&quot;)
+  next # Saltamos al siguiente número
+  }
+  cat(&quot;La raíz cuadrada de&quot;, n, &quot;es&quot;, sqrt(n), &quot;\n&quot;)
+} </code></pre>
+<pre><code>## [1] &quot;Número negativo&quot;
+## La raíz cuadrada de 4 es 2 
+## [1] &quot;Número negativo&quot;
+## [1] &quot;Número negativo&quot;
+## [1] &quot;Número negativo&quot;
+## [1] &quot;Número negativo&quot;
+## La raíz cuadrada de 10 es 3.162278 
+## La raíz cuadrada de 7 es 2.645751 
+## [1] &quot;Número negativo&quot;
+## [1] &quot;Número negativo&quot;</code></pre>
+</div>
+</div>
+<div id="variables-globales-vs-variables-locales" class="section level1">
+<h1>Variables globales vs Variables locales</h1>
+<p>Una función puede realizar cálculos complejos, por lo que a veces
+necesita usar variables para almacenar los resultados intermedios de sus
+cálculos. Las variables creadas en una función se llaman variables
+locales. Las variables globales son creadas fuera de la función.</p>
+<ul>
+<li><p>Las variables globales definen fuera de la función, pero puede
+utilizarse dentro de la misma.</p></li>
+<li><p>Las variables locales <strong>solo</strong> existen dentro de la
+función, no se pueden usar fuera.</p></li>
+<li><p>El operador de superasignación: &lt;&lt;-, permite modificar
+variables globales dentro de una función.</p></li>
+</ul>
+<p>Ejemplo</p>
+<pre class="r"><code>a &lt;- 7 # Variable global
+my_fun &lt;- function(b){
+  a &lt;- 2 # Variable local
+  return(a+b)
+}</code></pre>
+<p>Al ejecutar el código anterior, <code>a</code> pasa a valer 7. Si
+ejecuto <code>my_fun(3)</code> el resultado será 5 (pues la variable
+<code>a</code> local vale 2), pero el valor global de <code>a</code>
+sigue siendo 7.</p>
+<pre class="r"><code>a &lt;- 7
+my_fun &lt;- function(b){
+  a &lt;&lt;- 2
+  result &lt;- a+b
+  return(result)
+}</code></pre>
+<p>Al ejecutar el código anterior, <code>a</code> pasa a valer 7. Si
+ejecuto <code>my_fun(3)</code> el resultado será 5 y el valor global de
+<code>a</code> ahora será 2. La variable local <code>result</code>, solo
+se usa en la función y por tanto no estará definida globalmente.</p>
+</div>
+<div id="ejercicios" class="section level1">
+<h1>Ejercicios</h1>
+<ol style="list-style-type: decimal">
+<li><p>Calcular el mayor número cuyo factorial no exceda de <span class="math inline">\(10^100\)</span></p></li>
+<li><p>Escribe una función que devuelva <span class="math inline">\(k\)</span> números, donde cada número es la suma
+de <span class="math inline">\(n\)</span> números escogidos al azar
+entre 1 y 100 (con reemplazamiento), divido entre n.</p></li>
+</ol>
+<p>Pinta un histograma con los resultados de <span class="math inline">\(k=10000\)</span> para <span class="math inline">\(n=1\)</span>, <span class="math inline">\(n=2\)</span>, <span class="math inline">\(n=10\)</span> y <span class="math inline">\(n=100\)</span>. Pista: puedes usar la función
+<code>hist()</code>.</p>
+<p>¿Qué observas?</p>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Utilizando un bucle <code>for</code> y un <code>if</code>, suma
+los números pares entre 1 y 100 (ambos incluidos).</p></li>
+<li><p>La sentencia <code>nombre &lt;- NULL</code> permite crear un
+vector vacío. Este vector se puede ir llenando iterativamente dentro de
+un bucle, por ejemplo:</p></li>
+</ol>
+<pre class="r"><code>fb &lt;- NULL
+
+for(i in 1:10){
+  fb[i] &lt;- i
+}
+
+fb</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>Crea un vector que contange los 20 primeros número de la sucesión de
+Fibonacci (búscala en internet si no la conoces).</p>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Crea una función llamda <code>edad</code> que pida por consola la
+edad de la persona. Si es mayor de edad (&gt;=18) devolver: “Tiene
+derecho al voto” y si edad &lt; 18 devolver: “No tiene derecho al voto”.
+Nota: puede usar la función <code>readline</code>.</p></li>
+<li><p>Construye un bluce que en cada iteración genere una calificación
+al azar entre uno y diez y la sume a las clasificaciones generadas
+anteriormente. En el momento en el que esta suma supere el valor 50, el
+bucle ha de terminar.</p></li>
+<li><p>Crea una matriz de números enteros aleatorios de dimensiones 4x4,
+llamada “matriz_aleatoria”. Utilizando un bucle, imprime por pantalla la
+suma de cada fila de la matriz.</p></li>
+<li><p>Escribe un script de R que haga lo siguiente</p></li>
+</ol>
+<ul>
+<li><p>Genera un número entre 1 y 10 al azar y lo guarda en la variable
+<code>num_secreto</code>.</p></li>
+<li><p>Inicialice una variable <code>intentos</code> con el valor
+0.</p></li>
+<li><p>Pida por consola al usuario que adivine el número</p></li>
+<li><p>Si lo acierta, imprime por pantalla el mensaje “¡Enhorabuena!” y
+“Se ha conseguido en x intentos”, donde x es el número de veces que el
+usuario ha intentado adivinar el número.</p></li>
+<li><p>Si lo falla, imprime por pantalla el mensaje “El número secreto
+es mayor/menor que el elegido”, y actualiza el número de
+intentos.</p></li>
 </ul>
 </div>
 

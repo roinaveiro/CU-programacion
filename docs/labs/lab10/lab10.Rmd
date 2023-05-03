@@ -1,0 +1,413 @@
+---
+title: "Lab 10 - La familia apply - Introducción a dplyr"
+output:
+  html_document:
+    css: ./stat_labs.css
+    toc: yes
+    toc_float: yes
+    fig_caption: no
+    seal : False
+    includes:
+      after_body: insert-logo.html
+  pdf_document:
+    toc: yes
+---
+
+
+<div class="title-logo"></div>
+
+```{r packages_setup, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+
+# La familia apply
+
+La mayoría de las funciones en R están vectorizadas, lo que significa que la función operará sobre todos los elementos de un vector sin necesidad de hacer un bucle a través de cada elemento y actuar sobre cada uno de ellos. Esto hace la escritura de código más concisa, fácil de leer y menos propensa a errores.
+
+Las funciones de la familia apply realizan una determinada operación a todos los elementos de un vector o una lista. Es pues una forma corta de escribir un bucle y además más eficiente.
+
+## apply
+
+La función apply aplica una función a array, matrix o dataframe y devuelve un vector. Esta se aplica a una de las dimensiones del objeto (e.g. filas)
+
+```{r eval=FALSE}
+apply(X,      # Array, matriz o dataframe
+      MARGIN, # 1:filas, 2:columnas
+      FUN,    # Función
+      ...)
+```
+
+Por ejemplo
+
+```{r}
+apply(mtcars, 2, mean)
+```
+`apply` admite funciones creadas por el usuario
+
+```{r}
+sq_mean <- function(x){
+  return(mean(x)**2)
+}
+apply(mtcars, 2, sq_mean)
+```
+
+### Tu turno
+
+Crea una matriz 5x4 con los números del 1 al 20. Calcula la suma de los cuadrados de los elementos de la matriz por filas utilizando `apply`
+
+
+## lapply
+
+La función lapply aplica una función a una lista o a un vector y devuelve una lista de la misma longitud que el objeto de entrada. Ya que el resultado es una lista puede devolver objetos de diferente clase. Si queremos convertir la lista de retorno en vector podemos utilizar unlist(l)
+
+```{r eval=FALSE}
+lapply(X,      # Lista
+      FUN,    # Función
+      ...)
+```
+
+
+Por ejemplo
+
+```{r}
+c <- list(A = c(56, 12, 57, 24), B = c(89, 12, 64, 18, 65, 76))
+
+lapply(c, quantile)  
+```
+
+# Introducción a dplyr
+
+Primero de todo, has de instalar y cargar `dplyr` utilizando
+
+```{r eval=FALSE}
+install.packages("dplyr")
+```
+
+Ahora deberás cargarlo
+
+```{r}
+library(dplyr)
+```
+
+A la hora de trabajar con datos, en general, **necesitamos**
+
+- Crear nuevas variables
+
+- Resumir variables
+
+- Renombrar
+
+- Reordenar observaciones
+
+- Agrupar
+
+- ...
+
+
+Aprenderemos cómo hacer esto de forma **reproducible** con el paquete `dplyr` 
+
+
+```{r dplyr-part-of-tidyverse, echo=FALSE, out.width="30%", fig.align = "center", caption = "dplyr is part of the tidyverse"}
+knitr::include_graphics("img/dplyr-part-of-tidyverse.png")
+```
+
+`dplyr` introduce una grámatica para la transformación de datos. Algunas de las funciones (verbos) que aprenderemos
+
+- `select`: seleccionar columnas por nombre
+- `arrange`: ordenar filas según criterio
+- `slice`: escoger filas con índices
+- `filter`: escoger filas que cumplan cierta condición
+- `mutate`: añadir nuevas variables
+- `summarise`: resumir variables según ciertos estadísticos
+- `group_by`: para realizar operaciones por grupos
+- ... 
+
+Todos los verbos de `dplyr` funcionan de manera similar:
+
+- Primer argumento es el data frame
+
+- Lo siguientes argumentos especifican qué hacer con el data frame, usando los nombres de las variables (**sin comillas**)
+
+- La salida es otro data frame
+
+Los verbos pueden **concatenarse** utilizando el operador `%>%`
+
+Para aprender las diferentes transformaciones que podemos hacer sobre los datos, usaremos de nuevo
+**gapminder** (más información en `?gapminder`)
+
+```{r}
+gapminder <- read.csv("data/gm_full.csv")
+```
+
+### Verbo `select`
+
+En múltiples ocasiones tenemos conjutos de datos con miles de variables y nos puede interesar seleccionar un subconjunto de las mismas, para esto utilizamos `select`
+
+Por ejemplo: para observar únicamente la variable referente a esperanza de vida (`lifeExp`) 
+
+- Pasamos el data frame a través del pipe (`%>%`) a la función `select()`
+- El argumento es nombre de variable (sin comillas): `lifeExp`
+- Esto de lugar a un dataframe de 1704 filas y 1 columna
+
+
+```{r eval=F}
+gapminder %>%
+  select(lifeExp) 
+```
+
+Sin el pipe, podríamos hacer
+
+```{r eval=F}
+select(gapminder, lifeExp)
+```
+
+
+Podemos seleccionar varias columns
+```{r eval=F}
+gapminder %>%
+  select(lifeExp, country)
+```
+
+**NOTA**: los verbos no modifican el data frames. Para guardar el output como un nuevo dataframe
+
+```{r, eval=F}
+esperanza_vida <- gapminder %>%
+  select(lifeExp) 
+```
+
+También funciona la selección inversa
+
+
+```{r eval=F}
+gapminder %>%
+  select(-lifeExp, -pop, -year )
+```
+
+
+### Verbo: `arrange`
+
+Se utiliza para ordenar datos. Por ejemplo:
+seleccionemos país, año y esperanza de vida y ordenemos en orden **creciente** de esperanzada de vida
+
+```{r eval=F}
+gapminder %>%
+  select( country, year, lifeExp ) %>% 
+  arrange(lifeExp) 
+```
+
+Seleccionemos país, año y esperanza de vida y ordenemos en orden **decreciente** de esperanzada de vida
+
+```{r eval=F}
+gapminder %>%
+  select( country, year, lifeExp ) %>% 
+  arrange(desc(lifeExp)) 
+```
+`arrange` por defecto ordena de manera ascendente (si son números). Ante strings, `arrange` ordena por defecto de manera alfabética. `desc()` cambia el orden.
+
+Si se pasa más de una variable a `arrange`, se ordena en función de la primera. Las siguientes se utilizan, secuencialmente, para romper empates
+
+
+
+### Los pipes
+
+Un pipe es una técnica para pasar información de un proceso a otro
+
+* Empezamos con todo el dataset
+
+```{r, eval=F}
+gapminder %>% 
+  select( country, year, lifeExp ) %>% 
+  arrange(desc(country))  
+```
+
+
+* Este entra en `select`, que selecciona country, year, lifeExp
+
+```{r, eval=F}
+gapminder %>% 
+  select( country, year, lifeExp ) %>% 
+  arrange(desc(country)) 
+```
+
+* Por útimo, el resultado del select pasa a `arrange`
+
+```{r, eval=F}
+gapminder %>% 
+  select( country, year, lifeExp ) %>% 
+  arrange(desc(country)) 
+```
+
+
+
+### Verbo: `slice`
+
+
+Premite seleccionar filas
+
+```{r}
+gapminder %>%
+  select(country) %>%
+  slice(1:3)
+```
+
+
+## Tu turno
+
+Usando `slice` selecciona las tres últimas filas del dataset `gapminder`
+
+
+
+### Verbo: `filter`
+
+
+Permite seleccionar filas en función de sus valores. Los argumentos reflejan las condiciones del filtrado. El argumento es por tanto un **valor lógico**
+
+```{r}
+gapminder %>%
+  filter(country == "Spain", lifeExp > 80) 
+```
+
+
+Para construír filtros complejos, hay que manejar los operadores lógicos. Por defecto, los múltiples argumentos de `filter` se combinan con el operador AND.
+
+## Tu turno 
+
+Selecciona los países de América que en el 2007 tuvieran esperanza de vida superior a 75 o un PIB per cápita inferior a 6000
+
+```{r}
+gapminder %>%
+    filter(year == 2007, continent == "Americas", (lifeExp > 77 | gdpPercap < 4000) ) 
+```
+
+
+Ojo: en el filtrado, solo se incluyen filas con valores `TRUE` de la condición (se excluyen pues los `FALSE` y los `NA`).
+
+
+
+
+
+### Verbo: `count`
+
+Nos sirve para crear tablas de frecuencias 
+
+
+```{r}
+gapminder %>% 
+  filter(year == 1967) %>% 
+  count(continent) #<<
+```
+
+Es útil utilizarlo junto con `arrange`
+
+```{r}
+gapminder %>% 
+  filter(year == 1967) %>% 
+  count(continent) %>% 
+  arrange(n) 
+```
+
+
+
+
+### Verbo: `mutate`
+
+Permite crear variable. Por ejemplo
+
+```{r eval=F}
+gapminder %>%
+  mutate(gdp = gdpPercap * pop) 
+```
+
+**NOTA 1**: se puede definir más de una variable
+**NOTA 2**: en la definición, se puede usar variable recién definida
+
+
+### Verbo: `summarise`
+
+Perminet crear resúmenes de variables
+
+```{r}
+gapminder %>%
+  filter(year == 1967) %>%
+  summarise(mean_gdpPerCapita = mean(gdpPercap))
+```
+
+`summarise()` colapsa todas las filas en un único estadístico de resumen y elimina las columnas no necesarias para el cálculo
+
+Los resúmenes más útiles son:
+
+* Localización: `mean()` y `median()`
+
+* Dispersión: `sd()`, `IQR()`
+
+* Rango: `min()`, `quantile(x, 0.25)`, `max()`
+
+* Cuenta: `n()`
+
+
+### Verbo: `group_by`
+
+`summarise()` es tremendamente útil cuando se utiliza conjuntamente con `group_by()`.
+
+`group_by()` agrupa los datos según los valores de una o varias variables. Todas las operaciones que se realicen posteriormente, se aplicarán a cada uno de los grupos.
+
+Usando `summarise()` después de `group_by()` permite obtener estadísticos de resumen para diferentes grupos
+
+```{r}
+gapminder %>%
+  filter(year == 1967) %>%
+  group_by(continent) %>%
+  summarise(mean_gdpPerCapita = mean(gdpPercap))
+```
+
+
+
+**NOTA**: si hay valores ausentes, añadir `na.rm = TRUE`, e.g. `mean(x, na.rm = TRUE)`
+
+También podemos agrupar usando múltiples variables.
+
+
+
+# Ejercicios
+
+1. El coeficiente de variación es una medida de dispersión adimensional y por tanto, permite comparar la dispersión de variables con diferentes escalas. Se define como el cociente entre la desviación estándar y el valor absoluto de la media.
+
+* Crea una función que reciba un vector y calcule el coeficiente de variación.
+
+* Utilizando `apply` y la función creada anteriormente, calcula el coeficiente de variación de todas las variables del dataset `mtcars`. ¿Cuál presenta un coeficiente de variación mayor?
+
+2. Crea una lista con las siguientes matrices
+
+```{r}
+uno    <- matrix(38:46, 3)
+dos    <- matrix(56:64, 3)
+tres   <- matrix(82:93, 3)
+cuatro <- matrix(46:70, 5)
+```
+
+Usando `lapply`, extrae la segunda columna de cada una. Pista: tendrás que crear una función que extraiga la segunda columna de cada matriz dada.
+
+3. Utilizando `apply` junto con `class`, determina el tipo de cada variable de la base de datos `mtcars`.
+
+4. Crea una función que devuelva el resto de dividir un número entre 10. Utilizando apply junto con esta función, crea una matriz del mismo tamaño que `mymatrix` donde el elemento (i,j) de esta matriz sea el resto de dividir por diez el elemento (i,j) de `mymatrix`.
+
+```{r}
+mymatrix <- matrix(data = c(6,34,923,5,0, 112:116, 5,9,34,76,2, 545:549), nrow = 5)
+```
+
+
+5. Carga la base de datos completa de `gapminder`. Filtra los años 1967 y 2007. Para los siguientes ejercicios usaremos `dplyr`.
+
+6. Calcula para los años 1967 y 2007, el PIB per cápita medio de cada continente.
+
+7. Lista los cinco países que tenían mayor esperanza de vida en 1982 en el continente Américas.
+
+8. Filtra los datos de PIB per cápita y esperanza de vida de china. Haz una gráfica que contenga el PIB per cápita en el eje x y la esperanza de vida en el eje y. ¿Cómo describirías esta relación?
+
+9. Calcula el la esperanza de vida máxima y mínima por continentes en el año 2007.
+
+10. ¿Qué país tuvo el pib per cápita más alto? Para calcularlo, agrupa por país, extrae el máximo pib per cápita y ordena de forma descendente.
+
+

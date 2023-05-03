@@ -1,0 +1,309 @@
+---
+title: "Lab 09 - Condicionales y Bucles en R"
+output:
+  html_document:
+    css: ./stat_labs.css
+    toc: yes
+    toc_float: yes
+    fig_caption: no
+    seal : False
+    includes:
+      after_body: insert-logo.html
+  pdf_document:
+    toc: yes
+---
+
+<div class="title-logo"></div>
+
+```{r packages_setup, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+
+Las condicionales y los bucles son las dos estructuras de programación más importantes cualquiera sea el lenguaje que utilicemos.
+
+* Las condicionales permiten ejecutar cierto código en función de si se cumple una condición lógica.
+
+* Los bucles permiten repetir cierto código un número específíco de veces.
+
+
+# Condicionales
+
+Mandan a R realizar una tarea si se cumple una condición, Su estructura es la siguiente
+
+```{r, eval=F}
+if (se cumple esto) {
+  haz esto
+}
+```
+
+Los `if` reciben una expresión lógica (`TRUE` o `FALSE`).
+Además, pueden anidarse
+```{r}
+x <- 7
+if(x <= 8){
+  if(x>=5){
+    print("Número en [5,8]")
+  }
+}
+```
+
+## Tu turno
+
+Haz lo anterior con un único `if`.
+
+```{r}
+# Tú código aquí
+```
+
+`if` se complementa con `else` mediante la siguiente estructura
+
+```{r, eval=F}
+if (se cumple esto) {
+  haz esto
+} else{
+  Sino haz esto otro
+}
+```
+
+Si hay más de dos condiciones, se puede usar `else if`
+
+```{r, eval=F}
+if (se cumple esto) {
+  haz esto
+} else if(si se cumple esto){
+  haz esto otro
+} else{
+  sino haz esto
+}
+```
+
+Ejemplo: ¿cuál será el resultado del siguiente código?
+
+```{r, eval=F}
+x <- 7
+if (x>7) {
+  print(x + 3)
+} else if(x<7){
+  print(x-3)
+} else{
+  print(x)
+}
+```
+
+La operación if-else puede realizarse en una línea con la función `ifelse`, que tiene la siguiente estructura. 
+
+```{r, eval=F}
+ifelse(condicion, valor si TRUE, valor si FALSE)
+```
+
+Por ejemplo
+
+```{r}
+x <- 4
+ifelse(x==3, "es tres", "no es tres")
+```
+
+La operación `ifelse`, a diferencia de `if`; está **vectorizada**. Esto quiere decir que se aplica elemento a elemento sobre vectores. Por ejemplo
+
+```{r}
+x <- sample(1:10, 5, replace=T)
+ifelse(x%%2==0, "Par", "Impar")
+```
+
+Sin embargo, con `if-else`
+
+```{r, eval=FALSE}
+if(x%%2==0){
+  print("Par")
+}
+  else{
+    print("Impar")
+  }
+```
+
+
+# Bucles
+
+Permiten repetir operaciones un cierto número de veces. 
+Estudiaremos los bucles `for`, `while` y `repeat`. 
+
+## Bucles - for
+
+Repite un trozo de código muchas veces, una por cada elemento en un conjunto de entrada.
+
+```{r, eval=F}
+for(valor in conjunto){
+  haz esto
+}
+```
+
+En la primera iteración, la variable **valor** toma el primera valor del conjunto, en la segunda el segundo, y así sucesivamente.
+
+Ejemplo
+
+```{r}
+for(valor in c("A", "B", "C")){
+  print("Iterando")
+}
+
+for(valor in c("A", "B", "C")){
+  print(valor)
+}
+```
+
+## Tu turno
+
+Crea un código que sume los números múltiplos de 7 entre 1 y 100.
+
+```{r}
+# Tú código aquí
+```
+
+## Bucles - while
+
+Ejecuta un trozo de código mientras se cumple la condición de entrada
+
+```{r, eval=F}
+while(condicion){
+  haz esto
+}
+```
+
+Si la condición no se vuelve falsa en algún momento sino tendremos un bucle infinito
+
+
+Ejemplo
+
+```{r}
+x <- 1
+while(x < 8){
+  print(x)
+  x <- x + 1
+}
+```
+
+## Bucles - repeat
+
+Repite un secuencia de código hasta que se interrumpe con `break`
+
+Ejemplo
+
+```{r}
+i <- 0
+repeat{
+  i <- i +1
+  if (i > 10) {break}  
+  print(i)
+    } 
+```
+
+Para terminar, veremos un par de funcionalidades de interés que se utilizan para afectar el comportamiento de los bucles
+
+## break
+
+Rompe un bucle for, while o repeat. Al ejecutarse, salimos del bucle. 
+
+```{r}
+for(i in 1:15){
+  print(i)
+  if(i==3){break}
+}
+```
+
+## next
+Fuerza un salto en un bucle for al siguiente punto
+
+```{r}
+x <-  sample(-10:10, 10, replace=T)
+x
+for(n in x){
+  if(n<0){
+  print("Número negativo")
+  next # Saltamos al siguiente número
+  }
+  cat("La raíz cuadrada de", n, "es", sqrt(n), "\n")
+} 
+```
+
+# Variables globales vs Variables locales
+
+Una función puede realizar cálculos complejos, por lo que a veces necesita usar variables para almacenar los resultados intermedios de sus cálculos. Las variables creadas en una función se llaman variables locales. Las variables globales son creadas fuera de la función.
+
+* Las variables globales definen fuera de la función, pero puede utilizarse dentro de la misma.
+
+* Las variables locales **solo** existen dentro de la función, no se pueden usar fuera.
+
+* El operador de superasignación: <<-, permite modificar variables globales dentro de una función.
+
+Ejemplo
+
+```{r}
+a <- 7 # Variable global
+my_fun <- function(b){
+  a <- 2 # Variable local
+  return(a+b)
+}
+```
+
+Al ejecutar el código anterior, `a` pasa a valer 7. Si ejecuto `my_fun(3)` el resultado será 5 (pues la variable `a` local vale 2), pero el valor global de `a` sigue siendo 7.
+
+```{r}
+a <- 7
+my_fun <- function(b){
+  a <<- 2
+  result <- a+b
+  return(result)
+}
+```
+
+Al ejecutar el código anterior, `a` pasa a valer 7. Si ejecuto `my_fun(3)` el resultado será 5 y el valor global de `a` ahora será 2. La variable local `result`, solo se usa en la función y por tanto no estará definida globalmente.
+
+# Ejercicios
+
+1. Calcular el mayor número cuyo factorial no exceda de $10^100$
+
+2. Escribe una función que devuelva $k$ números, donde cada número es la suma de $n$ números escogidos al azar entre 1 y 100 (con reemplazamiento), divido entre n.
+
+Pinta un histograma con los resultados de $k=10000$ para $n=1$, $n=2$, $n=10$ y $n=100$.
+Pista: puedes usar la función `hist()`.
+
+¿Qué observas?
+
+3. Utilizando un bucle `for` y un `if`, suma los números pares entre 1 y 100 (ambos incluidos).
+
+4. La sentencia `nombre <- NULL` permite crear un vector vacío. Este vector se puede ir llenando iterativamente dentro de un bucle, por ejemplo:
+
+```{r}
+fb <- NULL
+
+for(i in 1:10){
+  fb[i] <- i
+}
+
+fb
+```
+
+Crea un vector que contange los 20 primeros número de la sucesión de Fibonacci (búscala en internet si no la conoces).
+
+5. Crea una función llamda `edad` que pida por consola la edad de la persona. Si es mayor de edad (>=18) devolver: "Tiene derecho al voto" y si edad < 18 devolver: "No tiene derecho al voto". Nota: puede usar la función `readline`.
+
+6. Construye un bluce que en cada iteración genere una calificación al azar entre uno y diez y la sume a las clasificaciones generadas anteriormente. En el momento en el que esta suma supere el valor 50, el bucle ha de terminar.
+
+7. Crea una matriz de números enteros aleatorios de dimensiones 4x4, llamada "matriz_aleatoria". Utilizando un bucle, imprime por pantalla la suma de cada fila de la matriz.
+
+8. Escribe un script de R que haga lo siguiente
+
+  * Genera un número entre 1 y 10 al azar y lo guarda en 
+  la variable `num_secreto`.
+  
+  * Inicialice una variable `intentos` con el valor 0.
+  
+  * Pida por consola al usuario que adivine el número
+  
+  * Si lo acierta, imprime por pantalla el mensaje "¡Enhorabuena!" y "Se ha conseguido en x intentos", donde x es el número de veces que el usuario ha intentado adivinar el número.
+  
+  * Si lo falla, imprime por pantalla el mensaje "El número secreto es mayor/menor que el elegido", y actualiza el número de intentos.
+
+

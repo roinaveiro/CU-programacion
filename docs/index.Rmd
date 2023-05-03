@@ -38,5 +38,7 @@ Esta es la página del curso de Programación creado por
   - [Lab 06 - Listas y Fechas en R](./labs/lab06/lab06.html)
   - [Lab 07 - Estadística Descriptiva en R](./labs/lab07/lab07.html)
   - [Lab 08 - Importando y Exportando datos en R - Funciones](./labs/lab08/lab08.html)
+  - [Lab 09 - Condicionales y Bucles en R - Funciones](./labs/lab09/lab09.html)
+  - [Lab 10 - La Familia Apply - Introducción a dplyr](./labs/lab10/lab10.html)
   
   
